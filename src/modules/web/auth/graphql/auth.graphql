@@ -1,0 +1,8 @@
+enum RegisterResult {
+  SUCCESS
+  FAILED
+}
+
+type Mutation {
+  register(email: String!, password: String!): RegisterResult
+}

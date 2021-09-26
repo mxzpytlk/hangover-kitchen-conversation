@@ -4,7 +4,8 @@ import {
   AuthUseCaseSymbol,
   IAuthUseCase,
 } from 'src/domain/auth/in/auth.use-case';
-import { Inject } from '@nestjs/common';
+import { Inject, UseFilters } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/filters/exception.filter';
 
 registerEnumType(RegisterResult, {
   name: 'RegisterResult',
@@ -16,6 +17,7 @@ export class AuthResolver {
     @Inject(AuthUseCaseSymbol) private readonly _authUseCase: IAuthUseCase,
   ) {}
 
+  @UseFilters(HttpExceptionFilter)
   @Mutation(() => RegisterResult)
   public async register(
     @Args('email') email: string,

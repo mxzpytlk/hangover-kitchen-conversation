@@ -10,7 +10,7 @@ export class ActivationMailService
 {
   public async inform(email: string): Promise<string> {
     const activationLink = v4();
-    const link = `${config.appUrl}/${ApiRoutes.ACTIVATE}${activationLink}`;
+    const link = `${config.appUrl}${ApiRoutes.ACTIVATE}${activationLink}`;
     await this.sendMail({
       recieverEmail: email,
       subject: 'Acount activation',

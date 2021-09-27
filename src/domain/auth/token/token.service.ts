@@ -1,7 +1,7 @@
-import { sign } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import * as config from 'src/assets/config.json';
 import { JSObject } from 'src/core/types';
-import { UserId } from 'src/domain/entities/user.entity';
+import { UserEntity, UserId } from 'src/domain/entities/user.entity';
 import { ISaveTokenPort } from 'src/domain/auth/out/create-token.port';
 import { IGetTokenPort } from 'src/domain/auth/out/get-token.port';
 import { IUpdateTokenPort } from 'src/domain/auth/out/update-token.port';
@@ -23,6 +23,7 @@ export class TokenService {
     const refreshToken = sign(payload, config.jwtSecretRefresh, {
       expiresIn: '30d',
     });
+
     return { accessToken, refreshToken };
   }
 
@@ -34,5 +35,20 @@ export class TokenService {
     return token
       ? this._updateTokenPort.updateRefreshToken(userId, refreshToken)
       : this._saveTokenPort.saveToken(userId, refreshToken);
+  }
+
+  public async validateRefreshToken(token: string): Promise<UserEntity> {
+    try {
+      const userData = verify(token, config.jwtSecretRefresh) as JwtPayload;
+      return new UserEntity(
+        userData._id,
+        userData._email,
+        userData._password,
+        userData._activationLink,
+        userData._isActivated,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 }

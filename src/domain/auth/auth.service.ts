@@ -66,4 +66,22 @@ export class AuthService implements IAuthUseCase {
     await this._tokenService.saveToken(user.id, jwt.refreshToken);
     return { user, jwt };
   }
+
+  public async refresh(refreshToken: string): Promise<SuccessAuth> {
+    if (!refreshToken) {
+      throw Exception.WRONG_AUTH_DATA;
+    }
+    const user = await this._tokenService.validateRefreshToken(refreshToken);
+    if (!user) {
+      throw Exception.WRONG_AUTH_DATA;
+    }
+    const jwt = this._tokenService.generateToken(
+      JSONUtils.converToJsonObject(user),
+    );
+    await this._tokenService.saveToken(user.id, jwt.refreshToken);
+    return {
+      user,
+      jwt,
+    };
+  }
 }

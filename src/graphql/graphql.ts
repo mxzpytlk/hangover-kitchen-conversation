@@ -27,6 +27,7 @@ export interface IQuery {
 
 export interface IMutation {
     register(email: string, password: string): Nullable<RegisterResult> | Promise<Nullable<RegisterResult>>;
+    refresh(): Nullable<SuccessAuth> | Promise<Nullable<SuccessAuth>>;
 }
 
 type Nullable<T> = T | null;

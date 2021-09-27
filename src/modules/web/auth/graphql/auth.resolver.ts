@@ -47,4 +47,26 @@ export class AuthResolver {
       accessToken,
     };
   }
+
+  @UseFilters(HttpExceptionFilter)
+  @Mutation()
+  public async refresh(@Context() context: GQLContext): Promise<SuccessAuth> {
+    const { res, req } = context;
+    const oldRefreshToken: string = req.cookies[CookieKeys.REFRESH_TOKEN];
+
+    const {
+      user,
+      jwt: { accessToken, refreshToken },
+    } = await this._authUseCase.refresh(oldRefreshToken);
+
+    res.cookie(CookieKeys.REFRESH_TOKEN, refreshToken, {
+      maxAge: DateUtils.daysToMiliseconds(30),
+      httpOnly: true,
+    });
+
+    return {
+      user,
+      accessToken,
+    };
+  }
 }

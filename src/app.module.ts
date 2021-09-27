@@ -13,6 +13,7 @@ import { DatabaseModule } from './modules/database/database.module';
         path: join(process.cwd(), 'src/graphql/graphql.ts'),
         outputAs: 'interface',
       },
+      context: ({ req, res }) => ({ req, res }),
     }),
     TypeOrmModule.forRoot(),
     WebModule,

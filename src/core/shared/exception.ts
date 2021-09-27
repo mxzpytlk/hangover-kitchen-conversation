@@ -1,6 +1,7 @@
 export enum ExceptionTypes {
   USER_INPUT,
   PERMISSION_DENIED,
+  UNAUTHORISED,
 }
 
 export class Exception extends Error {
@@ -27,5 +28,9 @@ export class Exception extends Error {
       'Acount already activated',
       ExceptionTypes.PERMISSION_DENIED,
     );
+  }
+
+  public static get WRONG_AUTH_DATA(): Exception {
+    return new Exception('Incorrect auth data', ExceptionTypes.UNAUTHORISED);
   }
 }

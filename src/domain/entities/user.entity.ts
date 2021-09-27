@@ -1,5 +1,13 @@
 export type UserId = string;
 
+type UserObject = {
+  id: UserId;
+  email: string;
+  password: string;
+  activationLink: string;
+  isActivated: boolean;
+};
+
 export class UserEntity {
   constructor(
     private readonly _id: UserId,

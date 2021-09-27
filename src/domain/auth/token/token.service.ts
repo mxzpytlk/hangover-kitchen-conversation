@@ -17,13 +17,13 @@ export class TokenService {
   ) {}
 
   public generateToken(payload: string | JSObject | Buffer): Jwt {
-    const accesToken = sign(payload, config.jwtSecretAcces, {
+    const accessToken = sign(payload, config.jwtSecretAcces, {
       expiresIn: '30m',
     });
     const refreshToken = sign(payload, config.jwtSecretRefresh, {
       expiresIn: '30d',
     });
-    return { accesToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
   public async saveToken(

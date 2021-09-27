@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, registerEnumType } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
 import { RegisterResult } from 'src/domain/auth/auth.type';
 import {
   AuthUseCaseSymbol,
@@ -6,10 +6,10 @@ import {
 } from 'src/domain/auth/in/auth.use-case';
 import { Inject, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/filters/exception.filter';
-
-registerEnumType(RegisterResult, {
-  name: 'RegisterResult',
-});
+import { SuccessAuth } from 'src/graphql/graphql';
+import { GQLContext } from 'src/core/types';
+import { CookieKeys } from 'src/core/enums/cookie-keys';
+import { DateUtils } from 'src/core/utils/date.utils';
 
 @Resolver()
 export class AuthResolver {
@@ -24,5 +24,27 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<RegisterResult> {
     return this._authUseCase.register(email, password);
+  }
+
+  @UseFilters(HttpExceptionFilter)
+  @Query()
+  public async login(
+    @Context() context: GQLContext,
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ): Promise<SuccessAuth> {
+    const {
+      user,
+      jwt: { accessToken, refreshToken },
+    } = await this._authUseCase.login(email, password);
+    context.res.cookie(CookieKeys.REFRESH_TOKEN, refreshToken, {
+      maxAge: DateUtils.daysToMiliseconds(30),
+      httpOnly: true,
+    });
+
+    return {
+      user,
+      accessToken,
+    };
   }
 }

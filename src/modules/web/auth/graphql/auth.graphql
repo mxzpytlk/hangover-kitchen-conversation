@@ -3,6 +3,24 @@ enum RegisterResult {
   FAILED
 }
 
+type User {
+  isActivated: Boolean!
+}
+
+"""
+Объект, который возвращается при успешной авторизации.
+Ожидается, что клиент во всех остальных запросах будет класть accessToken в заголовок Authorization
+в виде "Bearer accessToken". Токен действителен в течении 30 минут. По истечению этого срока необходимо отправить refresh мутацию.
+"""
+type SuccessAuth {
+  user: User!
+  accessToken: String!
+}
+
+type Query {
+  login(email: String!, password: String!): SuccessAuth!
+}
+
 type Mutation {
   """
   Регистрация пользователя.

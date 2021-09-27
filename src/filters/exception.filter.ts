@@ -1,7 +1,11 @@
 import { Catch } from '@nestjs/common';
 import { GqlExceptionFilter } from '@nestjs/graphql';
 import { Exception, ExceptionTypes } from 'src/core/shared/exception';
-import { UserInputError, ApolloError } from 'apollo-server-errors';
+import {
+  UserInputError,
+  ApolloError,
+  AuthenticationError,
+} from 'apollo-server-errors';
 
 @Catch(Error)
 export class HttpExceptionFilter implements GqlExceptionFilter {
@@ -16,6 +20,8 @@ export class HttpExceptionFilter implements GqlExceptionFilter {
     if (exception instanceof Exception) {
       if (exception.type === ExceptionTypes.USER_INPUT) {
         return new UserInputError(exception.message, this.defaultExtensions);
+      } else if (exception.type === ExceptionTypes.UNAUTHORISED) {
+        return new AuthenticationError(exception.message);
       }
     }
     return new ApolloError(

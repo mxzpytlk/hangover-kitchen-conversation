@@ -1,7 +1,7 @@
 import { UserId } from 'src/domain/entities/user.entity';
 
 export type Jwt = {
-  accesToken: string;
+  accessToken: string;
   refreshToken: string;
 };
 

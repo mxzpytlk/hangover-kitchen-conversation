@@ -1,4 +1,4 @@
-import { IAuthUseCase } from './in/auth.use-case';
+import { IAuthUseCase, SuccessAuth } from './in/auth.use-case';
 import { IGetUserPort } from './out/get-user.port';
 import { Exception } from '../../core/shared/exception';
 import { hash } from 'bcrypt';
@@ -9,6 +9,7 @@ import { RegisterResult } from './auth.type';
 import { IActivationInformPort } from 'src/domain/auth/out/activation-inform.port';
 import { UserEntity } from 'src/domain/entities/user.entity';
 import { IUpdateUserPort } from './out/update-user.port';
+import { compare } from 'bcrypt';
 
 export class AuthService implements IAuthUseCase {
   constructor(
@@ -48,5 +49,21 @@ export class AuthService implements IAuthUseCase {
       throw Exception.ALREDY_ACTIVATED;
     }
     return this._updateUserPort.activateUser(activationLink);
+  }
+
+  public async login(email: string, password: string): Promise<SuccessAuth> {
+    const user = await this._getUserPort.getUserByEmail(email);
+    if (!user) {
+      throw Exception.WRONG_AUTH_DATA;
+    }
+    const isPathEquals = await compare(password, user.password);
+    if (!isPathEquals) {
+      throw Exception.WRONG_AUTH_DATA;
+    }
+    const jwt = this._tokenService.generateToken(
+      JSONUtils.converToJsonObject(user),
+    );
+    await this._tokenService.saveToken(user.id, jwt.refreshToken);
+    return { user, jwt };
   }
 }

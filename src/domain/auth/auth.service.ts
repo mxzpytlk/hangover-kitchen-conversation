@@ -8,6 +8,7 @@ import { JSONUtils } from 'src/core/utils/json.utils';
 import { RegisterResult } from './auth.type';
 import { IActivationInformPort } from 'src/domain/auth/out/activation-inform.port';
 import { UserEntity } from 'src/domain/entities/user.entity';
+import { IUpdateUserPort } from './out/update-user.port';
 
 export class AuthService implements IAuthUseCase {
   constructor(
@@ -15,6 +16,7 @@ export class AuthService implements IAuthUseCase {
     private readonly _saveUserPort: ISaveUserPort,
     private readonly _activationInformPort: IActivationInformPort,
     private readonly _tokenService: TokenService,
+    private readonly _updateUserPort: IUpdateUserPort,
   ) {}
 
   public async register(
@@ -35,5 +37,16 @@ export class AuthService implements IAuthUseCase {
     );
     await this._tokenService.saveToken(user.id, jwt.refreshToken);
     return RegisterResult.SUCCESS;
+  }
+
+  public async activate(activationLink: string): Promise<void> {
+    const user = await this._getUserPort.getByActivationLink(activationLink);
+    if (!user) {
+      throw Exception.ACTIVATION_LINK_INCORRECT;
+    }
+    if (user.isActivated) {
+      throw Exception.ALREDY_ACTIVATED;
+    }
+    return this._updateUserPort.activateUser(activationLink);
   }
 }

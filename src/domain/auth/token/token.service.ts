@@ -7,6 +7,8 @@ import { IGetTokenPort } from 'src/domain/auth/out/get-token.port';
 import { IUpdateTokenPort } from 'src/domain/auth/out/update-token.port';
 import { Jwt, UserRefreshToken } from './token.type';
 
+export const TokenServiceSymbol = Symbol('TokenService');
+
 export class TokenService {
   constructor(
     private readonly _saveTokenPort: ISaveTokenPort,

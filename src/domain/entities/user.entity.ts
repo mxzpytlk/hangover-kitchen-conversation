@@ -6,6 +6,7 @@ export class UserEntity {
     private readonly _email: string,
     private readonly _password?: string,
     private readonly _activationLink?: string,
+    private readonly _isActivated = true,
   ) {}
 
   public get id(): UserId {
@@ -22,6 +23,10 @@ export class UserEntity {
 
   public get activationLink(): string {
     return this._activationLink;
+  }
+
+  public get isActivated(): boolean {
+    return this._isActivated;
   }
 
   public static createNew(

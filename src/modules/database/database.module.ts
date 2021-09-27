@@ -5,7 +5,10 @@ import { AuthUseCaseSymbol } from 'src/domain/auth/in/auth.use-case';
 import { UserPersistenceAdapter } from './user-orm/user-persistance.adapter';
 import { AuthService } from 'src/domain/auth/auth.service';
 import { ActivationMailService } from 'src/application/mail/activation-mail.service';
-import { TokenService } from 'src/domain/auth/token/token.service';
+import {
+  TokenService,
+  TokenServiceSymbol,
+} from 'src/domain/auth/token/token.service';
 import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
 
 @Global()
@@ -13,24 +16,31 @@ import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
   imports: [UserOrmModule, TokenOrmModule],
   providers: [
     {
+      provide: TokenServiceSymbol,
+      useFactory: (tokenPersistenceAdapter: TokenPersistenceAdapter) =>
+        new TokenService(
+          tokenPersistenceAdapter,
+          tokenPersistenceAdapter,
+          tokenPersistenceAdapter,
+        ),
+      inject: [TokenPersistenceAdapter],
+    },
+    {
       provide: AuthUseCaseSymbol,
 
       useFactory: (
         userPersistenceAdapter: UserPersistenceAdapter,
-        tokenPersistenceAdapter: TokenPersistenceAdapter,
+        tokenService: TokenService,
       ) =>
         new AuthService(
           userPersistenceAdapter,
           userPersistenceAdapter,
           new ActivationMailService(),
-          new TokenService(
-            tokenPersistenceAdapter,
-            tokenPersistenceAdapter,
-            tokenPersistenceAdapter,
-          ),
+          tokenService,
+          userPersistenceAdapter,
         ),
 
-      inject: [UserPersistenceAdapter, TokenPersistenceAdapter],
+      inject: [UserPersistenceAdapter, TokenServiceSymbol],
     },
   ],
   exports: [AuthUseCaseSymbol],

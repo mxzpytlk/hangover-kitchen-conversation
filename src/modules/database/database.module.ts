@@ -8,7 +8,7 @@ import { ActivationMailService } from 'src/application/mail/activation-mail.serv
 import {
   TokenService,
   TokenServiceSymbol,
-} from 'src/domain/auth/token/token.service';
+} from 'src/domain/auth/token.service';
 import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
 
 @Global()
@@ -18,12 +18,7 @@ import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
     {
       provide: TokenServiceSymbol,
       useFactory: (tokenPersistenceAdapter: TokenPersistenceAdapter) =>
-        new TokenService(
-          tokenPersistenceAdapter,
-          tokenPersistenceAdapter,
-          tokenPersistenceAdapter,
-          tokenPersistenceAdapter,
-        ),
+        new TokenService(tokenPersistenceAdapter),
       inject: [TokenPersistenceAdapter],
     },
     {
@@ -35,10 +30,8 @@ import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
       ) =>
         new AuthService(
           userPersistenceAdapter,
-          userPersistenceAdapter,
           new ActivationMailService(),
           tokenService,
-          userPersistenceAdapter,
         ),
 
       inject: [UserPersistenceAdapter, TokenServiceSymbol],

@@ -1,18 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/domain/entities/user.entity';
-import { IGetUserPort } from 'src/domain/auth/out/get-user.port';
-import { ISaveUserPort } from 'src/domain/auth/out/save-user.ports';
+import { UserEntity } from 'src/domain/auth/entities/user.entity';
+import { IUserStore } from 'src/domain/auth/out/user-store.port';
 import { Repository } from 'typeorm';
 import { UserMapper } from './user.mapper';
 import { UserOrmEntity } from './user.orm-entity';
 import { v4 } from 'uuid';
-import { IUpdateUserPort } from 'src/domain/auth/out/update-user.port';
 
 @Injectable()
-export class UserPersistenceAdapter
-  implements ISaveUserPort, IGetUserPort, IUpdateUserPort
-{
+export class UserPersistenceAdapter implements IUserStore {
   constructor(
     @InjectRepository(UserOrmEntity)
     private readonly _userRepository: Repository<UserOrmEntity>,

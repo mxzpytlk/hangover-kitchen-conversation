@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/domain/entities/user.entity';
+import { UserEntity } from 'src/domain/auth/entities/user.entity';
 import { UserOrmEntity } from './user.orm-entity';
 
 export class UserMapper {

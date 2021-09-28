@@ -1,4 +1,4 @@
-import { UserRefreshToken } from 'src/domain/auth/token/token.type';
+import { UserRefreshToken } from 'src/domain/auth/auth.type';
 import { TokenOrmEntity } from './token.orm-entity';
 
 export class TokenMapper {

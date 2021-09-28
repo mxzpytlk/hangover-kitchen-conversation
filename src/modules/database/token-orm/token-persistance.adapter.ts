@@ -1,20 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RandomUtils } from 'src/core/utils/random.utils';
-import { ISaveTokenPort } from 'src/domain/auth/out/create-token.port';
-import { IDeleteTokenPort } from 'src/domain/auth/out/delete-token.port';
-import { IGetTokenPort } from 'src/domain/auth/out/get-token.port';
-import { IUpdateTokenPort } from 'src/domain/auth/out/update-token.port';
-import { UserRefreshToken } from 'src/domain/auth/token/token.type';
+import { UserRefreshToken } from 'src/domain/auth/auth.type';
+import { ITokenStorePort } from 'src/domain/auth/out/token-store.port';
 import { Repository } from 'typeorm';
 import { UserOrmEntity } from '../user-orm/user.orm-entity';
 import { TokenMapper } from './token.mapper';
 import { TokenOrmEntity } from './token.orm-entity';
 
 @Injectable()
-export class TokenPersistenceAdapter
-  implements ISaveTokenPort, IGetTokenPort, IUpdateTokenPort, IDeleteTokenPort
-{
+export class TokenPersistenceAdapter implements ITokenStorePort {
   constructor(
     @InjectRepository(TokenOrmEntity)
     private readonly _tokenRepository: Repository<TokenOrmEntity>,

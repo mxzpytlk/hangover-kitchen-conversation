@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements GqlExceptionFilter {
     },
   };
 
-  public catch(exception: Error) {
+  public catch(exception: Error): ApolloError {
     if (exception instanceof Exception) {
       if (exception.type === ExceptionTypes.USER_INPUT) {
         return new UserInputError(exception.message, this.defaultExtensions);
@@ -24,6 +24,7 @@ export class HttpExceptionFilter implements GqlExceptionFilter {
         return new AuthenticationError(exception.message);
       }
     }
+
     return new ApolloError(
       exception.message,
       this.SERVER_ERROR_CODE,

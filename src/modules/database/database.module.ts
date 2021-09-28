@@ -22,6 +22,7 @@ import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
           tokenPersistenceAdapter,
           tokenPersistenceAdapter,
           tokenPersistenceAdapter,
+          tokenPersistenceAdapter,
         ),
       inject: [TokenPersistenceAdapter],
     },

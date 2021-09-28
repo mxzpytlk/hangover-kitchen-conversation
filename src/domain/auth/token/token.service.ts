@@ -6,6 +6,7 @@ import { ISaveTokenPort } from 'src/domain/auth/out/create-token.port';
 import { IGetTokenPort } from 'src/domain/auth/out/get-token.port';
 import { IUpdateTokenPort } from 'src/domain/auth/out/update-token.port';
 import { Jwt, UserRefreshToken } from './token.type';
+import { IDeleteTokenPort } from '../out/delete-token.port';
 
 export const TokenServiceSymbol = Symbol('TokenService');
 
@@ -14,6 +15,7 @@ export class TokenService {
     private readonly _saveTokenPort: ISaveTokenPort,
     private readonly _getTokenPort: IGetTokenPort,
     private readonly _updateTokenPort: IUpdateTokenPort,
+    private readonly _deleteTokenPort: IDeleteTokenPort,
   ) {}
 
   public generateToken(payload: string | JSObject | Buffer): Jwt {
@@ -50,5 +52,9 @@ export class TokenService {
     } catch (_) {
       return null;
     }
+  }
+
+  public async deleteRefreshToken(refreshToken: string): Promise<void> {
+    return this._deleteTokenPort.deleteRefreshToken(refreshToken);
   }
 }

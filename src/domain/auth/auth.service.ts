@@ -84,4 +84,8 @@ export class AuthService implements IAuthUseCase {
       jwt,
     };
   }
+
+  public async logout(refreshToken: string): Promise<void> {
+    return this._tokenService.deleteRefreshToken(refreshToken);
+  }
 }

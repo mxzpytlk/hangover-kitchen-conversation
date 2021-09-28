@@ -50,7 +50,7 @@ export class AuthResolver {
 
   @UseFilters(HttpExceptionFilter)
   @Mutation()
-  public async refresh(@Context() context: GQLContext): Promise<SuccessAuth> {
+  public async refresh(@Context() context: GQLContext): Promise<any> {
     const { res, req } = context;
     const oldRefreshToken: string = req.cookies[CookieKeys.REFRESH_TOKEN];
 
@@ -68,5 +68,14 @@ export class AuthResolver {
       user,
       accessToken,
     };
+  }
+
+  @UseFilters(HttpExceptionFilter)
+  @Mutation()
+  public async logout(@Context() { req, res }: GQLContext): Promise<boolean> {
+    const refreshToken: string = req.cookies.refreshToken;
+    res.clearCookie(CookieKeys.REFRESH_TOKEN);
+    await this._authUseCase.logout(refreshToken);
+    return true;
   }
 }

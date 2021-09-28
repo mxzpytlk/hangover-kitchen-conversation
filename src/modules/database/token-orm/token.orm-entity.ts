@@ -8,10 +8,8 @@ export class TokenOrmEntity {
   })
   public id: string;
 
-  @Column({
-    name: 'refresh_token',
-  })
-  public refreshToken: string;
+  @Column()
+  public refresh_token: string;
 
   @Column()
   public user_id: string;

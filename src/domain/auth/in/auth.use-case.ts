@@ -14,4 +14,5 @@ export interface IAuthUseCase {
   activate(activationLink: string): Promise<void>;
   login(email: string, password: string): Promise<SuccessAuth>;
   refresh(refreshToken: string): Promise<SuccessAuth>;
+  logout(refreshToken: string): Promise<void>;
 }

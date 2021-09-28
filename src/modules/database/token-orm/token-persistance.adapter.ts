@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RandomUtils } from 'src/core/utils/random.utils';
 import { ISaveTokenPort } from 'src/domain/auth/out/create-token.port';
+import { IDeleteTokenPort } from 'src/domain/auth/out/delete-token.port';
 import { IGetTokenPort } from 'src/domain/auth/out/get-token.port';
 import { IUpdateTokenPort } from 'src/domain/auth/out/update-token.port';
 import { UserRefreshToken } from 'src/domain/auth/token/token.type';
@@ -12,7 +13,7 @@ import { TokenOrmEntity } from './token.orm-entity';
 
 @Injectable()
 export class TokenPersistenceAdapter
-  implements ISaveTokenPort, IGetTokenPort, IUpdateTokenPort
+  implements ISaveTokenPort, IGetTokenPort, IUpdateTokenPort, IDeleteTokenPort
 {
   constructor(
     @InjectRepository(TokenOrmEntity)
@@ -58,9 +59,15 @@ export class TokenPersistenceAdapter
         user,
       },
       {
-        refreshToken,
+        refresh_token: refreshToken,
       },
     );
     return TokenMapper.toDomain(result as TokenOrmEntity);
+  }
+
+  public async deleteRefreshToken(refreshToken: string): Promise<void> {
+    const token = new TokenOrmEntity();
+    token.refresh_token = refreshToken;
+    await this._tokenRepository.delete(token);
   }
 }

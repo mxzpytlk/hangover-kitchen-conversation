@@ -37,9 +37,9 @@ export class TokenService {
       return new UserEntity(
         userData._id,
         userData._email,
+        userData._isActivated,
         userData._password,
         userData._activationLink,
-        userData._isActivated,
       );
     } catch (_) {
       return null;

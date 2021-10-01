@@ -7,7 +7,7 @@ export class UserMapper {
       return null;
     }
     const { id, email, password, activationLink, isActivated } = user;
-    return new UserEntity(id, email, password, activationLink, isActivated);
+    return new UserEntity(id, email, isActivated, password, activationLink);
   }
 
   public static mapToOrmEntity(userEntity: UserEntity): UserOrmEntity {

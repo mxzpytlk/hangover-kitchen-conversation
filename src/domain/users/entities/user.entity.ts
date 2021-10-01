@@ -4,9 +4,9 @@ export class UserEntity {
   constructor(
     private readonly _id: UserId,
     private readonly _email: string,
+    private readonly _isActivated: boolean,
     private readonly _password?: string,
     private readonly _activationLink?: string,
-    private readonly _isActivated = true,
   ) {}
 
   public get id(): UserId {
@@ -37,7 +37,8 @@ export class UserEntity {
     email: string,
     password: string,
     activationLink: string,
+    isActivated = false,
   ): UserEntity {
-    return new UserEntity(null, email, password, activationLink);
+    return new UserEntity(null, email, isActivated, password, activationLink);
   }
 }

@@ -4,7 +4,6 @@ import { RandomUtils } from 'src/core/utils/random.utils';
 import { UserRefreshToken } from 'src/domain/auth/auth.type';
 import { ITokenStorePort } from 'src/domain/auth/out/token-store.port';
 import { Repository } from 'typeorm';
-import { UserOrmEntity } from '../user-orm/user.orm-entity';
 import { TokenMapper } from './token.mapper';
 import { TokenOrmEntity } from './token.orm-entity';
 

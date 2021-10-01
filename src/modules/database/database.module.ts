@@ -13,7 +13,6 @@ import {
   TokenServiceSymbol,
 } from 'src/domain/auth/token.service';
 import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
-import { MailService } from 'src/modules/mail/services/mail.service';
 import { MailModule } from '../mail/mail.module';
 
 @Global()
@@ -33,15 +32,12 @@ import { MailModule } from '../mail/mail.module';
         userPersistenceAdapter: UserPersistenceAdapter,
         activationMailService: ActivationMailService,
         tokenService: TokenService,
-      ) => {
-        // console.log((activationMailService as any)());
-
-        return new AuthService(
+      ) =>
+        new AuthService(
           userPersistenceAdapter,
           activationMailService,
           tokenService,
-        );
-      },
+        ),
 
       inject: [
         UserPersistenceAdapter,

@@ -46,7 +46,7 @@ export class UserPersistenceAdapter implements IUserStore {
 
     const { email, password, activationLink } = userEntity;
 
-    return new UserEntity(userId.id, email, password, activationLink);
+    return new UserEntity(userId.id, email, false, password, activationLink);
   }
 
   public async activateUser(activation_link: string): Promise<void> {

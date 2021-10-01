@@ -1,17 +1,20 @@
-import { IActivationInformPort } from 'src/domain/auth/out/activation-inform.port';
-import { MailService } from './mail.service';
+import { MailService } from './services/mail.service';
 import { v4 } from 'uuid';
 import * as config from 'src/assets/config.json';
 import { ApiRoutes } from 'src/core/enums/api-route';
+import { INotificationPort } from 'src/domain/notifications/out/notification.port';
+
+export const ActivationMailSymbol = Symbol('ActivationMailService');
 
 export class ActivationMailService
-  extends MailService
-  implements IActivationInformPort
+  implements INotificationPort<undefined, string>
 {
-  public async inform(email: string): Promise<string> {
+  constructor(private readonly _mailService: MailService) {}
+
+  public async sendNotification(email: string): Promise<string> {
     const activationLink = v4();
     const link = `${config.appUrl}${ApiRoutes.ACTIVATE}${activationLink}`;
-    await this.sendMail({
+    await this._mailService.sendMail({
       recieverEmail: email,
       subject: 'Acount activation',
       html: `

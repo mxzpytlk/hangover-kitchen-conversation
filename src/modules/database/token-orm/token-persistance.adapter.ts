@@ -45,13 +45,11 @@ export class TokenPersistenceAdapter implements ITokenStorePort {
     userId: string,
     refreshToken: string,
   ): Promise<UserRefreshToken> {
-    const user = new UserOrmEntity();
-    user.id = userId;
     const {
       generatedMaps: [result],
     } = await this._tokenRepository.update(
       {
-        user,
+        user_id: userId,
       },
       {
         refresh_token: refreshToken,
@@ -62,7 +60,7 @@ export class TokenPersistenceAdapter implements ITokenStorePort {
 
   public async deleteRefreshToken(refreshToken: string): Promise<void> {
     const token = new TokenOrmEntity();
-    token.refresh_token = refreshToken;
+    token.refreshToken = refreshToken;
     await this._tokenRepository.delete(token);
   }
 }

@@ -33,4 +33,19 @@ export class Exception extends Error {
   public static get WRONG_AUTH_DATA(): Exception {
     return new Exception('Incorrect auth data', ExceptionTypes.UNAUTHORISED);
   }
+
+  public static get PERMISSION_DENIED(): Exception {
+    return new Exception('Permission denied', ExceptionTypes.PERMISSION_DENIED);
+  }
+
+  public static get ROOM_IS_FULL(): Exception {
+    return new Exception('Room is full', ExceptionTypes.PERMISSION_DENIED);
+  }
+
+  public static get KICK_ADMIN(): Exception {
+    return new Exception(
+      'Kicking admin is not allowed',
+      ExceptionTypes.PERMISSION_DENIED,
+    );
+  }
 }

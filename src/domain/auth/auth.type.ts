@@ -1,4 +1,4 @@
-import { UserId } from './entities/user.entity';
+import { UserId } from '../users/entities/user.entity';
 
 export enum RegisterResult {
   SUCCESS = 'SUCCESS',

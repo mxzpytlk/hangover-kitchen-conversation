@@ -7,8 +7,8 @@ export class TokenMapper {
       return null;
     }
     return {
-      refreshToken: tokenOrmEntity.refresh_token,
-      userId: tokenOrmEntity.user_id,
+      refreshToken: tokenOrmEntity.refreshToken,
+      userId: tokenOrmEntity.userId,
       id: tokenOrmEntity.id,
     };
   }
@@ -16,7 +16,7 @@ export class TokenMapper {
   public static toOrmEntity(tokenEntity: UserRefreshToken): TokenOrmEntity {
     const tokenOrmEntity = new TokenOrmEntity();
     tokenOrmEntity.userId = tokenEntity.userId;
-    tokenOrmEntity.refresh_token = tokenEntity.refreshToken;
+    tokenOrmEntity.refreshToken = tokenEntity.refreshToken;
     tokenOrmEntity.id = tokenEntity.id;
     return tokenOrmEntity;
   }

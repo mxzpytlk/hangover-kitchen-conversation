@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { UserOrmEntity } from '../user-orm/user.orm-entity';
 
 @Entity('tokens', {})
@@ -10,6 +10,14 @@ export class TokenOrmEntity {
 
   @Column()
   public refresh_token: string;
+
+  public get refreshToken(): string {
+    return this.refreshToken;
+  }
+
+  public set refreshToken(refreshToken: string) {
+    this.refresh_token = refreshToken;
+  }
 
   @Column()
   public user_id: string;
@@ -23,5 +31,8 @@ export class TokenOrmEntity {
   }
 
   @ManyToOne(() => UserOrmEntity, (user) => user.tokens)
+  @JoinColumn({
+    name: 'user_id',
+  })
   public user: UserOrmEntity;
 }

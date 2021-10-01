@@ -26,6 +26,6 @@ export class UserOrmEntity {
     return this.is_activated;
   }
 
-  @OneToMany(() => TokenOrmEntity, (token) => token.user)
+  @OneToMany(() => TokenOrmEntity, 'user_id')
   public tokens: TokenOrmEntity[];
 }

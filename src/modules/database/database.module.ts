@@ -4,16 +4,21 @@ import { TokenOrmModule } from './token-orm/token-orm.module';
 import { AuthUseCaseSymbol } from 'src/domain/auth/in/auth.use-case';
 import { UserPersistenceAdapter } from './user-orm/user-persistance.adapter';
 import { AuthService } from 'src/domain/auth/auth.service';
-import { ActivationMailService } from 'src/application/mail/activation-mail.service';
+import {
+  ActivationMailService,
+  ActivationMailSymbol,
+} from 'src/modules/mail/activation-mail.service';
 import {
   TokenService,
   TokenServiceSymbol,
 } from 'src/domain/auth/token.service';
 import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
+import { MailService } from 'src/modules/mail/services/mail.service';
+import { MailModule } from '../mail/mail.module';
 
 @Global()
 @Module({
-  imports: [UserOrmModule, TokenOrmModule],
+  imports: [UserOrmModule, TokenOrmModule, MailModule],
   providers: [
     {
       provide: TokenServiceSymbol,
@@ -26,15 +31,23 @@ import { TokenPersistenceAdapter } from './token-orm/token-persistance.adapter';
 
       useFactory: (
         userPersistenceAdapter: UserPersistenceAdapter,
+        activationMailService: ActivationMailService,
         tokenService: TokenService,
-      ) =>
-        new AuthService(
-          userPersistenceAdapter,
-          new ActivationMailService(),
-          tokenService,
-        ),
+      ) => {
+        // console.log((activationMailService as any)());
 
-      inject: [UserPersistenceAdapter, TokenServiceSymbol],
+        return new AuthService(
+          userPersistenceAdapter,
+          activationMailService,
+          tokenService,
+        );
+      },
+
+      inject: [
+        UserPersistenceAdapter,
+        ActivationMailSymbol,
+        TokenServiceSymbol,
+      ],
     },
   ],
   exports: [AuthUseCaseSymbol],

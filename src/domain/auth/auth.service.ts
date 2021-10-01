@@ -5,14 +5,14 @@ import { hash } from 'bcrypt';
 import { TokenService } from './token.service';
 import { JSONUtils } from 'src/core/utils/json.utils';
 import { RegisterResult } from './auth.type';
-import { IActivationInformPort } from 'src/domain/auth/out/activation-inform.port';
-import { UserEntity } from 'src/domain/auth/entities/user.entity';
+import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { compare } from 'bcrypt';
+import { INotificationPort } from '../notifications/out/notification.port';
 
 export class AuthService implements IAuthUseCase {
   constructor(
     private readonly _userStore: IUserStore,
-    private readonly _activationInformPort: IActivationInformPort,
+    private readonly _emailNotificator: INotificationPort<undefined, string>,
     private readonly _tokenService: TokenService,
   ) {}
 
@@ -25,7 +25,7 @@ export class AuthService implements IAuthUseCase {
       throw Exception.EMAIL_EXISTS;
     }
     const hashPass = await hash(password, 3);
-    const activationLink = await this._activationInformPort.inform(email);
+    const activationLink = await this._emailNotificator.sendNotification(email);
     const user = await this._userStore.saveUser(
       UserEntity.createNew(email, hashPass, activationLink),
     );

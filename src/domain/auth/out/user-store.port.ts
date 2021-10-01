@@ -1,4 +1,4 @@
-import { UserEntity, UserId } from 'src/domain/auth/entities/user.entity';
+import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 
 export interface IUserStore {
   getUserById(userId: UserId): Promise<UserEntity>;

@@ -29,6 +29,10 @@ export class UserEntity {
     return this._isActivated;
   }
 
+  public equals(user: UserEntity): boolean {
+    return user?.id === this._id;
+  }
+
   public static createNew(
     email: string,
     password: string,

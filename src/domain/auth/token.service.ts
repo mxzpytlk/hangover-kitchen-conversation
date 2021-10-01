@@ -1,7 +1,7 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import * as config from 'src/assets/config.json';
 import { JSObject } from 'src/core/types';
-import { UserEntity, UserId } from 'src/domain/auth/entities/user.entity';
+import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 import { ITokenStorePort } from 'src/domain/auth/out/token-store.port';
 import { UserRefreshToken, Jwt } from './auth.type';
 

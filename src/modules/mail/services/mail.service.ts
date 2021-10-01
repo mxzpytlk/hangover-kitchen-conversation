@@ -2,6 +2,7 @@ import * as config from 'src/assets/config.json';
 import { createTransport, SentMessageInfo } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { Exception } from 'src/core/shared/exception';
+import { Injectable } from '@nestjs/common';
 
 type MailMessage = {
   recieverEmail: string;
@@ -10,6 +11,7 @@ type MailMessage = {
   html?: string;
 };
 
+@Injectable()
 export class MailService {
   private _transporter: Mail<SentMessageInfo>;
 
@@ -25,7 +27,7 @@ export class MailService {
     });
   }
 
-  protected async sendMail(message: MailMessage): Promise<void> {
+  public async sendMail(message: MailMessage): Promise<void> {
     try {
       await this._transporter.sendMail({
         from: config.mailUser,

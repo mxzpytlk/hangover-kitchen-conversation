@@ -1,5 +1,5 @@
 import { Jwt, RegisterResult } from 'src/domain/auth/auth.type';
-import { UserEntity } from 'src/domain/auth/entities/user.entity';
+import { UserEntity } from 'src/domain/users/entities/user.entity';
 
 export const AuthUseCaseSymbol = Symbol('AuthUseCase');
 

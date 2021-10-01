@@ -50,7 +50,7 @@ export class AuthResolver {
 
   @UseFilters(HttpExceptionFilter)
   @Mutation()
-  public async refresh(@Context() context: GQLContext): Promise<any> {
+  public async refresh(@Context() context: GQLContext): Promise<SuccessAuth> {
     const { res, req } = context;
     const oldRefreshToken: string = req.cookies[CookieKeys.REFRESH_TOKEN];
 

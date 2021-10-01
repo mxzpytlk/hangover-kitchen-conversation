@@ -1,4 +1,4 @@
-import { UserId } from 'src/domain/auth/entities/user.entity';
+import { UserId } from 'src/domain/users/entities/user.entity';
 import { UserRefreshToken } from '../auth.type';
 
 export interface ITokenStorePort {

@@ -1,4 +1,4 @@
-import { MailService } from './services/mail.service';
+import { MailService } from './mail.service';
 import { v4 } from 'uuid';
 import * as config from 'src/assets/config.json';
 import { ApiRoutes } from 'src/core/enums/api-route';

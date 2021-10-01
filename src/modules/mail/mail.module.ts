@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import {
   ActivationMailService,
   ActivationMailSymbol,
-} from './activation-mail.service';
+} from './services/activation-mail.service';
 import { MailService } from './services/mail.service';
 
 @Module({

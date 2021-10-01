@@ -10,10 +10,11 @@ import { UserPersistenceAdapter } from 'src/modules/database/user-orm/user-persi
 import {
   ActivationMailService,
   ActivationMailSymbol,
-} from 'src/modules/mail/activation-mail.service';
+} from 'src/modules/mail/services/activation-mail.service';
 import { MailModule } from 'src/modules/mail/mail.module';
 import { AuthController } from './api/auth.controller';
 import { AuthResolver } from './graphql/auth.resolver';
+import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 
 @Module({
   imports: [MailModule, DatabaseModule],
@@ -22,7 +23,7 @@ import { AuthResolver } from './graphql/auth.resolver';
       provide: AuthUseCaseSymbol,
       useFactory: (
         userPersistenceAdapter: UserPersistenceAdapter,
-        activationMailService: ActivationMailService,
+        activationMailService: INotificationPort<undefined, string>,
         tokenService: TokenService,
       ) =>
         new AuthService(

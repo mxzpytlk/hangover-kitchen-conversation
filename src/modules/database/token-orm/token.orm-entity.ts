@@ -12,7 +12,7 @@ export class TokenOrmEntity {
   public refresh_token: string;
 
   public get refreshToken(): string {
-    return this.refreshToken;
+    return this.refresh_token;
   }
 
   public set refreshToken(refreshToken: string) {

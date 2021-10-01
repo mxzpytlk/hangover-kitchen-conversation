@@ -7,10 +7,7 @@ import {
 } from 'src/domain/auth/token.service';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { UserPersistenceAdapter } from 'src/modules/database/user-orm/user-persistance.adapter';
-import {
-  ActivationMailService,
-  ActivationMailSymbol,
-} from 'src/modules/mail/services/activation-mail.service';
+import { ActivationMailSymbol } from 'src/modules/mail/services/activation-mail.service';
 import { MailModule } from 'src/modules/mail/mail.module';
 import { AuthController } from './api/auth.controller';
 import { AuthResolver } from './graphql/auth.resolver';

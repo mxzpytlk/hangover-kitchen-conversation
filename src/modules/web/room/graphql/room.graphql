@@ -1,0 +1,18 @@
+type Room {
+  id: String!
+  name: String!
+  isOpen: Boolean!
+  description: String
+}
+
+type Mutation {
+  createRoom(title: String!, description: String, isOpen: Boolean): Room!
+  joinRoom(roomId: String!): Room
+  letUserIn(userName: String!, roomId: String!): Boolean
+  kickUser(userName: String!, roomId: String!): Boolean
+}
+
+type Query {
+  getRooms: [Room]!
+  getRoom(roomId: String!): Room!
+}

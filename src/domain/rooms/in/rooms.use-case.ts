@@ -10,7 +10,7 @@ export interface IRoomsUseCase {
   ): Promise<RoomEntity>;
   getRooms(): Promise<RoomEntity[]>;
   getRoom(id: RoomId): Promise<RoomEntity>;
-  addUserToRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity>;
+  joinRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity>;
   letUserIn(admin: UserEntity, userId: UserId, roomId: RoomId): Promise<void>;
   kickUser(admin: UserEntity, userId: UserId, roomId: RoomId): Promise<void>;
 }

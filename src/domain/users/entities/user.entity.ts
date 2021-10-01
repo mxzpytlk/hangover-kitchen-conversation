@@ -1,4 +1,5 @@
 export type UserId = string;
+export type UserName = string;
 
 export class UserEntity {
   constructor(
@@ -7,6 +8,7 @@ export class UserEntity {
     private readonly _isActivated: boolean,
     private readonly _password?: string,
     private readonly _activationLink?: string,
+    private readonly _name?: UserName,
   ) {}
 
   public get id(): UserId {
@@ -27,6 +29,10 @@ export class UserEntity {
 
   public get isActivated(): boolean {
     return this._isActivated;
+  }
+
+  public get name(): UserName {
+    return this._name;
   }
 
   public equals(user: UserEntity): boolean {

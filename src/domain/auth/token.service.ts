@@ -34,13 +34,12 @@ export class TokenService {
   public async validateRefreshToken(token: string): Promise<UserEntity> {
     try {
       const userData = verify(token, config.jwtSecretRefresh) as JwtPayload;
-      return new UserEntity(
-        userData._id,
-        userData._email,
-        userData._isActivated,
-        userData._password,
-        userData._activationLink,
-      );
+      const id: UserId = userData._id;
+      const email: string = userData._email;
+      const isActivated: boolean = userData._isActivated;
+      const password: string = userData._password;
+      const activationLink: string = userData._activationLink;
+      return new UserEntity(id, email, isActivated, password, activationLink);
     } catch (_) {
       return null;
     }

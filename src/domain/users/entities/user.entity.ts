@@ -1,5 +1,7 @@
+import { PersonalInfo } from '../model/personal-info';
+import { UserName } from '../user.types';
+
 export type UserId = string;
-export type UserName = string;
 
 export class UserEntity {
   constructor(
@@ -8,7 +10,7 @@ export class UserEntity {
     private readonly _isActivated: boolean,
     private readonly _password?: string,
     private readonly _activationLink?: string,
-    private readonly _name?: UserName,
+    private readonly _personalInfo?: PersonalInfo,
   ) {}
 
   public get id(): UserId {
@@ -32,7 +34,11 @@ export class UserEntity {
   }
 
   public get name(): UserName {
-    return this._name;
+    return this._personalInfo?.name;
+  }
+
+  public get isProfileFullfiled(): boolean {
+    return !!this.name;
   }
 
   public equals(user: UserEntity): boolean {

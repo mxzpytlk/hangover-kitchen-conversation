@@ -1,6 +1,7 @@
 import { Exception } from 'src/core/shared/exception';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
-import { UserEntity, UserName } from 'src/domain/users/entities/user.entity';
+import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
+import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity, RoomId } from '../entities/room.entity';
 import { IRoomsUseCase } from '../in/rooms.use-case';
 import { IRoomUserStorePort } from '../out/room-user-store.port';
@@ -18,7 +19,7 @@ export class RoomService implements IRoomsUseCase {
   ) {}
 
   public async createRoom(
-    adminId: UserName,
+    adminId: UserId,
     title: string,
     isOpen = true,
     description?: string,

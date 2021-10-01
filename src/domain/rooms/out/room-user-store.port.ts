@@ -1,4 +1,5 @@
-import { UserEntity, UserName } from 'src/domain/users/entities/user.entity';
+import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity } from '../entities/room.entity';
 
 export interface IRoomUserStorePort {

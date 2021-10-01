@@ -4,3 +4,5 @@ export type PersonalInfo = {
   name: UserName;
   description?: string;
 };
+
+export type PersonalInfoChanges = Partial<PersonalInfo>;

@@ -3,10 +3,6 @@ enum RegisterResult {
   FAILED
 }
 
-type User {
-  isActivated: Boolean!
-}
-
 type SuccessAuth {
   user: User!
   accessToken: String!

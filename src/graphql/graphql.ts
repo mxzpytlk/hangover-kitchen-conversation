@@ -12,8 +12,9 @@ export enum RegisterResult {
     FAILED = "FAILED"
 }
 
-export interface User {
-    isActivated: boolean;
+export interface UpdateProfileInput {
+    name?: Nullable<string>;
+    description?: Nullable<string>;
 }
 
 export interface SuccessAuth {
@@ -35,6 +36,7 @@ export interface IMutation {
     joinRoom(roomId: string): Nullable<Room> | Promise<Nullable<Room>>;
     letUserIn(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
     kickUser(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateProfileInfo(changes?: Nullable<UpdateProfileInput>): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface Room {
@@ -42,6 +44,16 @@ export interface Room {
     name: string;
     isOpen: boolean;
     description?: Nullable<string>;
+}
+
+export interface Profile {
+    name: string;
+    description?: Nullable<string>;
+}
+
+export interface User {
+    isActivated: boolean;
+    personalInfo?: Nullable<Profile>;
 }
 
 type Nullable<T> = T | null;

@@ -1,0 +1,26 @@
+"""
+Профиль можно создать после активации аккаута.
+Пользователю без имени недоступны никакие операции, кроме смены настроек и операций не требующих регистрации.
+"""
+type Profile {
+  name: String!
+  description: String
+}
+
+type User {
+  isActivated: Boolean!
+  personalInfo: Profile
+}
+
+"""
+Тип нужен для того, чтобы была возможность сделать имя опциональным параметром.
+Если тип не соответствует Profile, то на сервере ошибка.
+"""
+input UpdateProfileInput {
+  name: String
+  description: String
+}
+
+type Mutation {
+  updateProfileInfo(changes: UpdateProfileInput): Boolean
+}

@@ -1,6 +1,6 @@
 import { UserEntity } from '../entities/user.entity';
 import { IUserUseCase } from '../in/user.use-case';
-import { PersonalInfo } from '../model/personal-info';
+import { PersonalInfoChanges } from '../model/personal-info';
 import { IUserStorePort } from '../out/user-store.port';
 
 export class UserService implements IUserUseCase {
@@ -8,7 +8,7 @@ export class UserService implements IUserUseCase {
 
   public async updateProfileInfo(
     user: UserEntity,
-    newProfile: PersonalInfo,
+    newProfile: PersonalInfoChanges,
   ): Promise<void> {
     return this._userStorePort.updateProfile(user, newProfile);
   }

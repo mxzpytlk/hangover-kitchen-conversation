@@ -4,8 +4,7 @@ import {
   AuthUseCaseSymbol,
   IAuthUseCase,
 } from 'src/domain/auth/in/auth.use-case';
-import { Inject, UseFilters } from '@nestjs/common';
-import { HttpExceptionFilter } from 'src/filters/exception.filter';
+import { Inject } from '@nestjs/common';
 import { SuccessAuth } from 'src/graphql/graphql';
 import { GQLContext } from 'src/core/types';
 import { CookieKeys } from 'src/core/enums/cookie-keys';
@@ -18,7 +17,6 @@ export class AuthResolver {
     @Inject(AuthUseCaseSymbol) private readonly _authUseCase: IAuthUseCase,
   ) {}
 
-  @UseFilters(HttpExceptionFilter)
   @Mutation(() => RegisterResult)
   @WithoutAuth()
   public async register(
@@ -28,7 +26,6 @@ export class AuthResolver {
     return this._authUseCase.register(email, password);
   }
 
-  @UseFilters(HttpExceptionFilter)
   @Query()
   @WithoutAuth()
   public async login(
@@ -51,7 +48,6 @@ export class AuthResolver {
     };
   }
 
-  @UseFilters(HttpExceptionFilter)
   @Mutation()
   @WithoutAuth()
   public async refresh(@Context() context: GQLContext): Promise<SuccessAuth> {
@@ -74,7 +70,6 @@ export class AuthResolver {
     };
   }
 
-  @UseFilters(HttpExceptionFilter)
   @Mutation()
   @WithoutAuth()
   public async logout(@Context() { req, res }: GQLContext): Promise<boolean> {

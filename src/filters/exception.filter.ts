@@ -21,7 +21,10 @@ export class HttpExceptionFilter implements GqlExceptionFilter {
       if (exception.type === ExceptionTypes.USER_INPUT) {
         return new UserInputError(exception.message, this.defaultExtensions);
       } else if (exception.type === ExceptionTypes.UNAUTHORISED) {
-        return new AuthenticationError(exception.message);
+        return new AuthenticationError(
+          exception.message,
+          this.defaultExtensions,
+        );
       }
     }
 

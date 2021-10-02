@@ -12,7 +12,7 @@ export class RoomService implements IRoomsUseCase {
     private readonly _roomsStore: IRoomsStore,
     private readonly _roomUserStore: IRoomUserStorePort,
     /**
-     * Оповещает админа о новых пользователяхы
+     * Оповещает админа о новых пользователях.
      */
     private readonly _newUserNotificator: INotificationPort<UserEntity>,
     private readonly _roomEntryNotificator: INotificationPort<RoomEntity>,

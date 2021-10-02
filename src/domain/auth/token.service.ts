@@ -32,8 +32,19 @@ export class TokenService {
   }
 
   public async validateRefreshToken(token: string): Promise<UserEntity> {
+    return this.validateToken(token, config.jwtSecretRefresh);
+  }
+
+  public async validateAcessToken(token: string): Promise<UserEntity> {
+    return this.validateToken(token, config.jwtSecretAcces);
+  }
+
+  private async validateToken(
+    token: string,
+    secret: string,
+  ): Promise<UserEntity> {
     try {
-      const userData = verify(token, config.jwtSecretRefresh) as JwtPayload;
+      const userData = verify(token, secret) as JwtPayload;
       const id: UserId = userData._id;
       const email: string = userData._email;
       const isActivated: boolean = userData._isActivated;

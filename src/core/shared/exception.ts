@@ -52,7 +52,7 @@ export class Exception extends Error {
   public static get ONLY_FOR_AUTHORISED(): Exception {
     return new Exception(
       'Operation available only for authorised users',
-      ExceptionTypes.UNAUTHORISED,
+      ExceptionTypes.PERMISSION_DENIED,
     );
   }
 }

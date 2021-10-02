@@ -18,6 +18,6 @@ import { TokenOrmEntity } from './token.orm-entity';
       inject: [TokenPersistenceAdapter],
     },
   ],
-  exports: [TokenPersistenceAdapter, TokenServiceSymbol],
+  exports: [TokenServiceSymbol],
 })
 export class TokenOrmModule {}

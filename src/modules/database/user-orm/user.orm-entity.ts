@@ -9,22 +9,24 @@ export class UserOrmEntity {
   @Column()
   public email: string;
 
-  @Column()
-  public activation_link: string;
-
-  public get activationLink(): string {
-    return this.activation_link;
-  }
+  @Column({
+    name: 'activation_link',
+  })
+  public activationLink: string;
 
   @Column()
   public password: string;
 
-  @Column()
-  public is_activated: boolean;
+  @Column({
+    name: 'is_activated',
+  })
+  public isActivated: boolean;
 
-  public get isActivated(): boolean {
-    return this.is_activated;
-  }
+  @Column()
+  public name: string;
+
+  @Column()
+  public description: string;
 
   @OneToMany(() => TokenOrmEntity, 'user_id')
   public tokens: TokenOrmEntity[];

@@ -1,5 +1,5 @@
 import { IAuthUseCase, SuccessAuth } from './in/auth.use-case';
-import { IUserStore } from './out/user-store.port';
+import { IUserStorePort } from '../users/out/user-store.port';
 import { Exception } from '../../core/shared/exception';
 import { hash } from 'bcrypt';
 import { TokenService } from './token.service';
@@ -11,7 +11,7 @@ import { INotificationPort } from '../notifications/out/notification.port';
 
 export class AuthService implements IAuthUseCase {
   constructor(
-    private readonly _userStore: IUserStore,
+    private readonly _userStore: IUserStorePort,
     private readonly _emailNotificator: INotificationPort<undefined, string>,
     private readonly _tokenService: TokenService,
   ) {}
@@ -59,6 +59,7 @@ export class AuthService implements IAuthUseCase {
     const jwt = this._tokenService.generateToken(
       JSONUtils.converToJsonObject(user),
     );
+
     await this._tokenService.saveToken(user.id, jwt.refreshToken);
     return { user, jwt };
   }

@@ -30,10 +30,10 @@ export class TokenPersistenceAdapter implements ITokenStorePort {
     return TokenMapper.toDomain(result as TokenOrmEntity);
   }
 
-  public async getToken(user_id: string): Promise<UserRefreshToken> {
+  public async getToken(userId: string): Promise<UserRefreshToken> {
     const tokenOrmEntity = await this._tokenRepository.findOne({
       where: {
-        user_id,
+        userId,
       },
     });
 
@@ -48,10 +48,10 @@ export class TokenPersistenceAdapter implements ITokenStorePort {
       generatedMaps: [result],
     } = await this._tokenRepository.update(
       {
-        user_id: userId,
+        userId,
       },
       {
-        refresh_token: refreshToken,
+        refreshToken,
       },
     );
     return TokenMapper.toDomain(result as TokenOrmEntity);

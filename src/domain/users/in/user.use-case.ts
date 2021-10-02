@@ -1,6 +1,11 @@
 import { UserEntity } from '../entities/user.entity';
-import { PersonalInfo } from '../model/personal-info';
+import { PersonalInfo, PersonalInfoChanges } from '../model/personal-info';
+
+export const UserUseCaseSymbol = Symbol('UserService');
 
 export interface IUserUseCase {
-  updateProfileInfo(user: UserEntity, newProfile: PersonalInfo): Promise<void>;
+  updateProfileInfo(
+    user: UserEntity,
+    newProfile: PersonalInfoChanges,
+  ): Promise<PersonalInfo>;
 }

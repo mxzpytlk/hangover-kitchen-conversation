@@ -55,4 +55,11 @@ export class Exception extends Error {
       ExceptionTypes.PERMISSION_DENIED,
     );
   }
+
+  public static get EMPTY_NAME(): Exception {
+    return new Exception(
+      'User must not have empty name',
+      ExceptionTypes.USER_INPUT,
+    );
+  }
 }

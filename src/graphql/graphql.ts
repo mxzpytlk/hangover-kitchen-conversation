@@ -36,7 +36,7 @@ export interface IMutation {
     joinRoom(roomId: string): Nullable<Room> | Promise<Nullable<Room>>;
     letUserIn(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
     kickUser(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
-    updateProfileInfo(changes?: Nullable<UpdateProfileInput>): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateProfileInfo(changes?: Nullable<UpdateProfileInput>): Nullable<Profile> | Promise<Nullable<Profile>>;
 }
 
 export interface Room {
@@ -47,7 +47,7 @@ export interface Room {
 }
 
 export interface Profile {
-    name: string;
+    name?: Nullable<string>;
     description?: Nullable<string>;
 }
 

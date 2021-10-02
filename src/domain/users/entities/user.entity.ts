@@ -33,8 +33,16 @@ export class UserEntity {
     return this._isActivated;
   }
 
+  public get personalInfo(): PersonalInfo {
+    return this._personalInfo;
+  }
+
   public get name(): UserName {
     return this._personalInfo?.name;
+  }
+
+  public get description(): string {
+    return this._personalInfo?.description;
   }
 
   public get isProfileFullfiled(): boolean {

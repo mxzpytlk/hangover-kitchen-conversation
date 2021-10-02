@@ -1,4 +1,5 @@
 import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { PersonalInfo } from 'src/domain/users/model/personal-info';
 import { UserOrmEntity } from './user.orm-entity';
 
 export class UserMapper {
@@ -7,15 +8,28 @@ export class UserMapper {
       return null;
     }
     const { id, email, password, activationLink, isActivated } = user;
-    return new UserEntity(id, email, isActivated, password, activationLink);
+    const profile: PersonalInfo = {
+      name: user.name,
+      description: user.description,
+    };
+    return new UserEntity(
+      id,
+      email,
+      isActivated,
+      password,
+      activationLink,
+      profile,
+    );
   }
 
   public static mapToOrmEntity(userEntity: UserEntity): UserOrmEntity {
     const userOrmEntity = new UserOrmEntity();
     userOrmEntity.email = userEntity.email;
     userOrmEntity.password = userEntity.password;
-    userOrmEntity.activation_link = userEntity.activationLink;
-    userOrmEntity.is_activated = userEntity.isActivated;
+    userOrmEntity.activationLink = userEntity.activationLink;
+    userOrmEntity.isActivated = userEntity.isActivated;
+    userOrmEntity.name = userEntity.name;
+    userOrmEntity.description = userEntity.description;
     return userOrmEntity;
   }
 }

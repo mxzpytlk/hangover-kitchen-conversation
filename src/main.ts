@@ -6,9 +6,13 @@ import * as cookieParser from 'cookie-parser';
 const PORT = process.env.PORT || 3000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.use(cookieParser());
-  await app.listen(PORT);
+  try {
+    const app = await NestFactory.create(AppModule);
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.use(cookieParser());
+    await app.listen(PORT);
+  } catch (e) {
+    console.log(e);
+  }
 }
 bootstrap();

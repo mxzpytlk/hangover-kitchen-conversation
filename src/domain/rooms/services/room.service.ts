@@ -1,8 +1,10 @@
 import { Exception } from 'src/core/shared/exception';
+import { RandomUtils } from 'src/core/utils/random.utils';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity, RoomId } from '../entities/room.entity';
+import { UserRoomEntity } from '../entities/user-room.entity';
 import { IRoomsUseCase } from '../in/rooms.use-case';
 import { IRoomUserStorePort } from '../out/room-user-store.port';
 import { IRoomsStorePort } from '../out/rooms-store.port';
@@ -26,14 +28,22 @@ export class RoomService implements IRoomsUseCase {
     limit?: number,
     canSendAnonimusMessage?: boolean,
   ): Promise<RoomEntity> {
-    return this._roomUserStore.createRoom(
-      admin,
+    const roomId = RandomUtils.randomString(16);
+    const room = new RoomEntity(
+      roomId,
       title,
+      new Date(),
+      [],
+      {
+        admin: new UserRoomEntity(admin),
+        commonUsers: [],
+      },
       isOpen,
-      description,
-      limit,
       canSendAnonimusMessage,
+      limit,
+      description,
     );
+    return this._roomUserStore.createRoom(room);
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -55,6 +65,9 @@ export class RoomService implements IRoomsUseCase {
 
   public async joinRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity> {
     const room = await this.getRoom(roomId, user);
+    if (room.hasUser(user)) {
+      return room;
+    }
     if (room.isFull) {
       throw Exception.ROOM_IS_FULL;
     }

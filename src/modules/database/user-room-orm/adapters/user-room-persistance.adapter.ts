@@ -6,7 +6,6 @@ import { UserRoomEntity } from 'src/domain/rooms/entities/user-room.entity';
 import { IRoomUserStorePort } from 'src/domain/rooms/out/room-user-store.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserMapper } from '../../user-orm/user.mapper';
 import { RoomMapper } from '../mappers/room.mapper';
 import { UserRoomMapper } from '../mappers/user-room.mapper';
 import { RoomOrmEntity } from '../orm-entities/room.orm-entity';
@@ -21,41 +20,17 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     private readonly _userRoomRepository: Repository<UserRoomOrmEntity>,
   ) {}
 
-  public async createRoom(
-    admin: UserEntity,
-    title: string,
-    isOpen?: boolean,
-    description?: string,
-    limit?: number,
-    canSendAnonimusMessage?: boolean,
-  ): Promise<RoomEntity> {
-    const roomId = RandomUtils.randomString(16);
-    const room = RoomMapper.mapToOrmEntity(
-      new RoomEntity(
-        roomId,
-        title,
-        new Date(),
-        [],
-        null,
-        isOpen,
-        canSendAnonimusMessage,
-        limit,
-        description,
-      ),
-    );
+  public async createRoom(room: RoomEntity): Promise<RoomEntity> {
     const roomSaveResult = await this._roomRepository.save(room);
-    const adminRoomOrm = new UserRoomOrmEntity();
-    adminRoomOrm.userId = admin.id;
-    adminRoomOrm.roomId = roomSaveResult.id;
-    adminRoomOrm.isAdmin = true;
-    adminRoomOrm.user = UserMapper.mapToOrmEntity(admin);
-
-    roomSaveResult.userRooms = [adminRoomOrm];
+    const admin = room.admin;
+    const adminOrm = UserRoomMapper.mapUserToOrm(admin, roomSaveResult.id);
+    adminOrm.isAdmin = true;
+    roomSaveResult.userRooms = [adminOrm];
 
     const createdRoom = RoomMapper.mapToDOmain(roomSaveResult);
 
     const userRoom = UserRoomMapper.mapToOrm(
-      new UserRoomEntity(admin, true),
+      new UserRoomEntity(admin.user, true),
       createdRoom,
       RandomUtils.randomString(16),
     );
@@ -64,8 +39,20 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     return createdRoom;
   }
 
-  addUser(room: RoomEntity, user: string | UserEntity): Promise<void> {
-    throw new Error('Method not implemented.');
+  public async addUser(
+    room: RoomEntity,
+    user: string | UserEntity,
+  ): Promise<void> {
+    const userEntity =
+      typeof user === 'string' ? new UserEntity(user, null, null, null) : user;
+
+    const userRoom = UserRoomMapper.mapToOrm(
+      new UserRoomEntity(userEntity, true),
+      room,
+      RandomUtils.randomString(16),
+    );
+
+    await this._userRoomRepository.save(userRoom);
   }
 
   deleteUser(room: RoomEntity, userName: string): Promise<void> {

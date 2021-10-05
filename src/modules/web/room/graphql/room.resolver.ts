@@ -82,4 +82,39 @@ export class RoomResolver {
       canSendAnonimusMessage,
     };
   }
+
+  @Mutation()
+  public async joinRoom(
+    @Context() context: GQLContext,
+    @Args('roomId') roomId: string,
+  ): Promise<Room> {
+    const user = context.user;
+    const room = await this._roomUseCase.joinRoom(user, roomId);
+
+    if (!room) {
+      return null;
+    }
+
+    const {
+      id,
+      title,
+      description,
+      date,
+      isOpen,
+      users,
+      limit,
+      canSendAnonimusMessage,
+    } = room;
+
+    return {
+      id,
+      title,
+      isOpen,
+      description,
+      date: date.toISOString(),
+      participantsCount: users.length,
+      limit,
+      canSendAnonimusMessage,
+    };
+  }
 }

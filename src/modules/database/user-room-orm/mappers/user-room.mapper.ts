@@ -1,4 +1,4 @@
-import { RoomEntity } from 'src/domain/rooms/entities/room.entity';
+import { RoomEntity, RoomId } from 'src/domain/rooms/entities/room.entity';
 import { UserRoomEntity } from 'src/domain/rooms/entities/user-room.entity';
 import { UserMapper } from '../../user-orm/user.mapper';
 import { UserRoomOrmEntity } from '../orm-entities/user-room.orm-entity';
@@ -26,5 +26,18 @@ export class UserRoomMapper {
       UserMapper.mapToDomain(userRoom.user),
       userRoom.isNotificationsOn,
     );
+  }
+
+  public static mapUserToOrm(
+    user: UserRoomEntity,
+    room: RoomId,
+  ): UserRoomOrmEntity {
+    const userRoomOrm = new UserRoomOrmEntity();
+    userRoomOrm.roomId = room;
+    const userOrm = UserMapper.mapToOrmEntity(user.user);
+    userRoomOrm.user = userOrm;
+    userRoomOrm.isNotificationsOn = user.isNotificationsOn;
+
+    return userRoomOrm;
   }
 }

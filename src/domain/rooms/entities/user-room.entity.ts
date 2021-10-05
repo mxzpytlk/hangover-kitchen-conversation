@@ -17,4 +17,8 @@ export class UserRoomEntity {
   public equals(user: UserEntity | UserRoomEntity) {
     return this._user.id === user?.id;
   }
+
+  public get user(): UserEntity {
+    return this._user;
+  }
 }

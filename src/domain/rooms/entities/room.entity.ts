@@ -68,6 +68,10 @@ export class RoomEntity {
     return this._limit && this._limit <= this.users.length;
   }
 
+  public hasUser(user: UserEntity): boolean {
+    return this.users.some((userInRoom) => userInRoom.equals(user));
+  }
+
   public hasUserAcces(user: UserEntity) {
     return (
       this.isOpen || this.users.some((participant) => participant.equals(user))

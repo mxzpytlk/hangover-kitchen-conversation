@@ -1,12 +1,14 @@
 type Room {
   id: String!
-  name: String!
+  title: String!
   isOpen: Boolean!
   description: String
+  canSendAnonimusMessage: Boolean
+  limit: Int
 }
 
 type Mutation {
-  createRoom(title: String!, description: String, isOpen: Boolean): Room!
+  createRoom(title: String!, description: String, isOpen: Boolean, canSendAnonimusMessage: Boolean, limit: Int): Room!
   joinRoom(roomId: String!): Room
   letUserIn(userName: String!, roomId: String!): Boolean
   kickUser(userName: String!, roomId: String!): Boolean

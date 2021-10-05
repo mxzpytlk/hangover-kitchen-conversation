@@ -2,6 +2,7 @@ import { DateUtils } from 'src/core/utils/date.utils';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { UsersInRoom } from '../room.type';
 import { MessageEntity } from './message.entity';
+import { UserRoomEntity } from './user-room.entity';
 
 export type RoomId = string;
 
@@ -13,6 +14,7 @@ export class RoomEntity {
     private readonly _messages: MessageEntity[],
     private readonly _users: UsersInRoom,
     private readonly _isOpen = true,
+    private readonly _canSendAnonimusMessage = true,
     private readonly _limit?: number,
     private readonly _description?: string,
   ) {}
@@ -33,7 +35,19 @@ export class RoomEntity {
     return this._isOpen;
   }
 
-  public get users(): UserEntity[] {
+  public get canSendAnonimusMessage(): boolean {
+    return this._canSendAnonimusMessage;
+  }
+
+  public get date(): Date {
+    return this._date;
+  }
+
+  public get limit(): number {
+    return this._limit;
+  }
+
+  public get users(): UserRoomEntity[] {
     return [this._users.admin, ...this._users.commonUsers];
   }
 
@@ -46,7 +60,7 @@ export class RoomEntity {
     return generalPopularity;
   }
 
-  public get admin(): UserEntity {
+  public get admin(): UserRoomEntity {
     return this._users.admin;
   }
 

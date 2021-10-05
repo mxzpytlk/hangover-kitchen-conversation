@@ -24,6 +24,7 @@ export class UserMapper {
 
   public static mapToOrmEntity(userEntity: UserEntity): UserOrmEntity {
     const userOrmEntity = new UserOrmEntity();
+    userOrmEntity.id = userEntity.id;
     userOrmEntity.email = userEntity.email;
     userOrmEntity.password = userEntity.password;
     userOrmEntity.activationLink = userEntity.activationLink;

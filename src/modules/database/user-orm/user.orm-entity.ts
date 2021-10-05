@@ -1,5 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { TokenOrmEntity } from '../token-orm/token.orm-entity';
+import { RoomOrmEntity } from '../user-room-orm/orm-entities/room.orm-entity';
+import { UserRoomOrmEntity } from '../user-room-orm/orm-entities/user-room.orm-entity';
 
 @Entity('users', {})
 export class UserOrmEntity {
@@ -30,4 +32,11 @@ export class UserOrmEntity {
 
   @OneToMany(() => TokenOrmEntity, 'user_id')
   public tokens: TokenOrmEntity[];
+
+  @OneToMany(() => UserRoomOrmEntity, 'user_id')
+  public userRooms: UserRoomOrmEntity[];
+
+  public get rooms(): RoomOrmEntity[] {
+    return this.userRooms?.map((userRoom) => userRoom.room);
+  }
 }

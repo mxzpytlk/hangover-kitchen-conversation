@@ -9,6 +9,7 @@ import {
   PersonalInfo,
   PersonalInfoChanges,
 } from 'src/domain/users/model/personal-info';
+import { WithoutProfileFullfiled } from '../../auth/decorators/without-profile-fullfiled';
 
 @Resolver()
 export class UserResolver {
@@ -17,6 +18,7 @@ export class UserResolver {
   ) {}
 
   @Mutation()
+  @WithoutProfileFullfiled()
   public async updateProfileInfo(
     @Context() context: GQLContext,
     @Args('changes') changes: PersonalInfoChanges,

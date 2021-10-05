@@ -5,11 +5,11 @@ import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity, RoomId } from '../entities/room.entity';
 import { IRoomsUseCase } from '../in/rooms.use-case';
 import { IRoomUserStorePort } from '../out/room-user-store.port';
-import { IRoomsStore } from '../out/rooms-store.port';
+import { IRoomsStorePort } from '../out/rooms-store.port';
 
 export class RoomService implements IRoomsUseCase {
   constructor(
-    private readonly _roomsStore: IRoomsStore,
+    private readonly _roomsStore: IRoomsStorePort,
     private readonly _roomUserStore: IRoomUserStorePort,
     /**
      * Оповещает админа о новых пользователях.
@@ -19,15 +19,21 @@ export class RoomService implements IRoomsUseCase {
   ) {}
 
   public async createRoom(
-    adminId: UserId,
+    admin: UserEntity,
     title: string,
     isOpen = true,
     description?: string,
+    limit?: number,
+    canSendAnonimusMessage?: boolean,
   ): Promise<RoomEntity> {
-    if (!adminId) {
-      throw Exception.ONLY_FOR_AUTHORISED;
-    }
-    return this._roomsStore.createRoom(adminId, title, isOpen, description);
+    return this._roomUserStore.createRoom(
+      admin,
+      title,
+      isOpen,
+      description,
+      limit,
+      canSendAnonimusMessage,
+    );
   }
 
   public async getRooms(): Promise<RoomEntity[]> {

@@ -1,12 +1,16 @@
 import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 import { RoomEntity, RoomId } from '../entities/room.entity';
 
+export const RoomServiceSymbol = Symbol('RoomService');
+
 export interface IRoomsUseCase {
   createRoom(
-    adminId: UserId,
+    admin: UserEntity,
     title: string,
     isOpen?: boolean,
     description?: string,
+    limit?: number,
+    canSendAnonimusMessage?: boolean,
   ): Promise<RoomEntity>;
   getRooms(): Promise<RoomEntity[]>;
   getRoom(id: RoomId): Promise<RoomEntity>;

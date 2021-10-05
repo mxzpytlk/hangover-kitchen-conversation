@@ -1,8 +1,9 @@
 import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { UserRoomEntity } from './entities/user-room.entity';
 
 export type UsersInRoom = {
-  commonUsers: UserEntity[];
-  admin: UserEntity;
+  commonUsers: UserRoomEntity[];
+  admin: UserRoomEntity;
 };
 
 export type MessageId = string;

@@ -32,7 +32,7 @@ export interface IMutation {
     register(email: string, password: string): Nullable<RegisterResult> | Promise<Nullable<RegisterResult>>;
     refresh(): Nullable<SuccessAuth> | Promise<Nullable<SuccessAuth>>;
     logout(): Nullable<boolean> | Promise<Nullable<boolean>>;
-    createRoom(title: string, description?: Nullable<string>, isOpen?: Nullable<boolean>): Room | Promise<Room>;
+    createRoom(title: string, description?: Nullable<string>, isOpen?: Nullable<boolean>, canSendAnonimusMessage?: Nullable<boolean>, limit?: Nullable<number>): Room | Promise<Room>;
     joinRoom(roomId: string): Nullable<Room> | Promise<Nullable<Room>>;
     letUserIn(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
     kickUser(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -41,9 +41,11 @@ export interface IMutation {
 
 export interface Room {
     id: string;
-    name: string;
+    title: string;
     isOpen: boolean;
     description?: Nullable<string>;
+    canSendAnonimusMessage?: Nullable<boolean>;
+    limit?: Nullable<number>;
 }
 
 export interface Profile {

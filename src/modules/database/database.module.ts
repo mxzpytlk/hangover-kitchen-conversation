@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UserOrmModule } from './user-orm/user-orm.module';
 import { TokenOrmModule } from './token-orm/token-orm.module';
+import { UserRoomOrmModule } from './user-room-orm/user-room-orm.module';
 
 @Module({
-  imports: [UserOrmModule, TokenOrmModule],
-  exports: [UserOrmModule, TokenOrmModule],
+  imports: [TokenOrmModule, UserRoomOrmModule],
+  exports: [TokenOrmModule, UserRoomOrmModule],
 })
 export class DatabaseModule {}

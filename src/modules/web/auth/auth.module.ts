@@ -12,6 +12,8 @@ import { MailModule } from 'src/modules/mail/mail.module';
 import { AuthController } from './api/auth.controller';
 import { AuthResolver } from './graphql/auth.resolver';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
+import { ProfileFullfiledGuard } from './guards/profile-fullfiled.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [MailModule, DatabaseModule],
@@ -36,7 +38,10 @@ import { INotificationPort } from 'src/domain/notifications/out/notification.por
       ],
     },
     AuthResolver,
+    ProfileFullfiledGuard,
+    AuthGuard,
   ],
   controllers: [AuthController],
+  exports: [ProfileFullfiledGuard, AuthGuard],
 })
 export class AuthModule {}

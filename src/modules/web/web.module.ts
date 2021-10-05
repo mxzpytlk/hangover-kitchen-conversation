@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TokenOrmModule } from '../database/token-orm/token-orm.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/guards/auth.guard';
+import { AppGuard } from './guards/app.guard';
 import { RoomModule } from './room/room.module';
 import { UserModule } from './user/user.module';
 
@@ -11,7 +11,7 @@ import { UserModule } from './user/user.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: AppGuard,
     },
   ],
 })

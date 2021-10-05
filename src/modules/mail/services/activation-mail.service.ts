@@ -1,6 +1,5 @@
 import { MailService } from './mail.service';
 import { v4 } from 'uuid';
-import * as config from 'src/assets/config.json';
 import { ApiRoutes } from 'src/core/enums/api-route';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 
@@ -13,7 +12,7 @@ export class ActivationMailService
 
   public async sendNotification(email: string): Promise<string> {
     const activationLink = v4();
-    const link = `${config.appUrl}${ApiRoutes.ACTIVATE}${activationLink}`;
+    const link = `${process.env.PORT}${ApiRoutes.ACTIVATE}${activationLink}`;
     await this._mailService.sendMail({
       recieverEmail: email,
       subject: 'Acount activation',

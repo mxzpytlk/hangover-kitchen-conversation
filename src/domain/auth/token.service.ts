@@ -1,5 +1,4 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
-import * as config from 'src/assets/config.json';
 import { JSObject } from 'src/core/types';
 import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 import { ITokenStorePort } from 'src/domain/auth/out/token-store.port';
@@ -11,10 +10,10 @@ export class TokenService {
   constructor(private readonly _tokenStore: ITokenStorePort) {}
 
   public generateToken(payload: string | JSObject | Buffer): Jwt {
-    const accessToken = sign(payload, config.jwtSecretAcces, {
+    const accessToken = sign(payload, process.env.JWT_SECRET_ACCESS, {
       expiresIn: '30m',
     });
-    const refreshToken = sign(payload, config.jwtSecretRefresh, {
+    const refreshToken = sign(payload, process.env.JWT_SECRET_REFRESH, {
       expiresIn: '30d',
     });
 
@@ -32,11 +31,11 @@ export class TokenService {
   }
 
   public async validateRefreshToken(token: string): Promise<UserEntity> {
-    return this.validateToken(token, config.jwtSecretRefresh);
+    return this.validateToken(token, process.env.JWT_SECRET_REFRESH);
   }
 
   public async validateAcessToken(token: string): Promise<UserEntity> {
-    return this.validateToken(token, config.jwtSecretAcces);
+    return this.validateToken(token, process.env.JWT_SECRET_ACCESS);
   }
 
   private async validateToken(

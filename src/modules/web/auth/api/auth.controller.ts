@@ -3,7 +3,6 @@ import {
   AuthUseCaseSymbol,
   IAuthUseCase,
 } from 'src/domain/auth/in/auth.use-case';
-import * as config from 'src/assets/config.json';
 import { RedirectType } from 'src/core/types';
 
 @Controller('api')
@@ -20,11 +19,11 @@ export class AuthController {
     try {
       await this._authService.activate(activationLink);
       return {
-        url: config.clientUrl,
+        url: process.env.CLIENT_URL,
       };
     } catch (error) {
       return {
-        url: config.clientUrlError,
+        url: process.env.CLIENT_URL_ERROR,
       };
     }
   }

@@ -38,3 +38,4 @@ lerna-debug.log*
 # app configs
 /src/assets/config.json
 ormconfig.json
+.env

@@ -1,4 +1,3 @@
-import * as config from 'src/assets/config.json';
 import { createTransport, SentMessageInfo } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { Exception } from 'src/core/shared/exception';
@@ -17,12 +16,12 @@ export class MailService {
 
   constructor() {
     this._transporter = createTransport({
-      host: config.mailHost,
-      port: config.mailPort,
+      host: process.env.MAIL_HOST,
+      port: +process.env.MAIL_PORT,
       secure: true,
       auth: {
-        user: config.mailUser,
-        pass: config.mailPass,
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
     });
   }
@@ -30,7 +29,7 @@ export class MailService {
   public async sendMail(message: MailMessage): Promise<void> {
     try {
       await this._transporter.sendMail({
-        from: config.mailUser,
+        from: process.env.MAIL_USER,
         to: message.recieverEmail,
         subject: message.subject,
         text: message.text ?? '',

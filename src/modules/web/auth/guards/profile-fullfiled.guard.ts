@@ -22,13 +22,16 @@ export class ProfileFullfiledGuard implements CanActivate {
       MetadataKeys.WITHOUT_PROFILE_FULLFILED,
       context.getHandler(),
     );
-    if (withoutAuth?.withoutAuth || withoutProfileFulfiled) {
+    if (
+      (withoutAuth?.withoutAuth && !withoutAuth.needattempt) ||
+      withoutProfileFulfiled
+    ) {
       return true;
     }
     const gqlContext = GqlExecutionContext.create(context);
     const ctx = gqlContext.getContext<GQLContext>();
     const user = await this._userPersistanceAdapter.getUserById(ctx.user.id);
     ctx.user = user;
-    return user.isProfileFullfiled;
+    return user.isProfileFullfiled || withoutAuth?.needattempt;
   }
 }

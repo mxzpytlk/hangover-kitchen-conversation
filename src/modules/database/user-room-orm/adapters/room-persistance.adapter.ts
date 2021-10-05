@@ -19,7 +19,11 @@ export class RoomPersistanceAdapter implements IRoomsStorePort {
     });
     return roomOrms.map(RoomMapper.mapToDOmain);
   }
-  getRoom(id: string): Promise<RoomEntity> {
-    throw new Error('Method not implemented.');
+
+  public async getRoom(id: string): Promise<RoomEntity> {
+    const roomOrm = await this._roomRepository.findOne(id, {
+      relations: ['userRooms', 'userRooms.user'],
+    });
+    return RoomMapper.mapToDOmain(roomOrm);
   }
 }

@@ -30,10 +30,10 @@ export class UserOrmEntity {
   @Column()
   public description: string;
 
-  @OneToMany(() => TokenOrmEntity, 'user_id')
+  @OneToMany(() => TokenOrmEntity, (token) => token.user)
   public tokens: TokenOrmEntity[];
 
-  @OneToMany(() => UserRoomOrmEntity, 'user_id')
+  @OneToMany(() => UserRoomOrmEntity, (userRoom) => userRoom.user)
   public userRooms: UserRoomOrmEntity[];
 
   public get rooms(): RoomOrmEntity[] {

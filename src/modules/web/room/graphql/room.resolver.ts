@@ -51,4 +51,35 @@ export class RoomResolver {
       };
     });
   }
+
+  @Query()
+  @WithoutAuth(true)
+  public async getRoom(
+    @Context() context: GQLContext,
+    @Args('roomId') roomId: string,
+  ): Promise<Room> {
+    const user = context.user;
+    const room = await this._roomUseCase.getRoom(roomId, user);
+    const {
+      id,
+      title,
+      description,
+      date,
+      isOpen,
+      users,
+      limit,
+      canSendAnonimusMessage,
+    } = room;
+
+    return {
+      id,
+      title,
+      isOpen,
+      description,
+      date: date.toISOString(),
+      participantsCount: users.length,
+      limit,
+      canSendAnonimusMessage,
+    };
+  }
 }

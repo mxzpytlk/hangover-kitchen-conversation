@@ -13,7 +13,7 @@ export interface IRoomsUseCase {
     canSendAnonimusMessage?: boolean,
   ): Promise<RoomEntity>;
   getRooms(): Promise<RoomEntity[]>;
-  getRoom(id: RoomId): Promise<RoomEntity>;
+  getRoom(id: RoomId, receiver?: UserEntity): Promise<RoomEntity>;
   joinRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity>;
   letUserIn(admin: UserEntity, userId: UserId, roomId: RoomId): Promise<void>;
   kickUser(admin: UserEntity, userId: UserId, roomId: RoomId): Promise<void>;

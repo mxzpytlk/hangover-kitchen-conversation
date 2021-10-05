@@ -7,7 +7,6 @@ import { IRoomUserStorePort } from 'src/domain/rooms/out/room-user-store.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserMapper } from '../../user-orm/user.mapper';
-import { UserOrmEntity } from '../../user-orm/user.orm-entity';
 import { RoomMapper } from '../mappers/room.mapper';
 import { UserRoomMapper } from '../mappers/user-room.mapper';
 import { RoomOrmEntity } from '../orm-entities/room.orm-entity';

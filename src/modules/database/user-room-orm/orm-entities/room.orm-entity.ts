@@ -29,7 +29,7 @@ export class RoomOrmEntity {
   @Column()
   public limit: number;
 
-  @OneToMany(() => UserRoomOrmEntity, (userRoom) => userRoom.roomId)
+  @OneToMany(() => UserRoomOrmEntity, (userRoom) => userRoom.room)
   public userRooms: UserRoomOrmEntity[];
 
   public get users(): UserOrmEntity[] {

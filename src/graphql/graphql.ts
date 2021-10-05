@@ -43,9 +43,11 @@ export interface Room {
     id: string;
     title: string;
     isOpen: boolean;
+    date?: Nullable<string>;
     description?: Nullable<string>;
     canSendAnonimusMessage?: Nullable<boolean>;
     limit?: Nullable<number>;
+    participantsCount?: Nullable<number>;
 }
 
 export interface Profile {

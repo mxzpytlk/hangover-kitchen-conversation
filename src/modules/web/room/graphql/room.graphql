@@ -2,9 +2,11 @@ type Room {
   id: String!
   title: String!
   isOpen: Boolean!
+  date: String
   description: String
   canSendAnonimusMessage: Boolean
   limit: Int
+  participantsCount: Int
 }
 
 type Mutation {

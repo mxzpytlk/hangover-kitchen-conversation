@@ -1,11 +1,13 @@
 import { Inject } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GQLContext } from 'src/core/types';
 import { RoomEntity } from 'src/domain/rooms/entities/room.entity';
 import {
   IRoomsUseCase,
   RoomServiceSymbol,
 } from 'src/domain/rooms/in/rooms.use-case';
+import { Room } from 'src/graphql/graphql';
+import { WithoutAuth } from '../../auth/decorators/without-auth.decorator';
 
 @Resolver()
 export class RoomResolver {
@@ -31,5 +33,22 @@ export class RoomResolver {
       limit,
       canSendAnonimusMessage,
     );
+  }
+
+  @Query()
+  @WithoutAuth()
+  public async getRooms(): Promise<Room[]> {
+    const rooms = await this._roomUseCase.getRooms();
+    return rooms.map((room) => {
+      const { id, title, isOpen, users, limit } = room;
+
+      return {
+        id,
+        title,
+        isOpen,
+        limit,
+        participantsCount: users.length,
+      };
+    });
   }
 }

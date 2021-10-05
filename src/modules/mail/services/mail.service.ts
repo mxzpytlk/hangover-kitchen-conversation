@@ -2,6 +2,7 @@ import { createTransport, SentMessageInfo } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { Exception } from 'src/core/shared/exception';
 import { Injectable } from '@nestjs/common';
+import { environment } from 'src/core/env';
 
 type MailMessage = {
   recieverEmail: string;
@@ -16,12 +17,12 @@ export class MailService {
 
   constructor() {
     this._transporter = createTransport({
-      host: process.env.MAIL_HOST,
-      port: +process.env.MAIL_PORT,
+      host: environment.MAIL_HOST,
+      port: +environment.MAIL_PORT,
       secure: true,
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: environment.MAIL_USER,
+        pass: environment.MAIL_PASS,
       },
     });
   }
@@ -29,7 +30,7 @@ export class MailService {
   public async sendMail(message: MailMessage): Promise<void> {
     try {
       await this._transporter.sendMail({
-        from: process.env.MAIL_USER,
+        from: environment.MAIL_USER,
         to: message.recieverEmail,
         subject: message.subject,
         text: message.text ?? '',

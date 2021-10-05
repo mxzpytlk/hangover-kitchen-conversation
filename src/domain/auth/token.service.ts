@@ -3,6 +3,7 @@ import { JSObject } from 'src/core/types';
 import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 import { ITokenStorePort } from 'src/domain/auth/out/token-store.port';
 import { UserRefreshToken, Jwt } from './auth.type';
+import { environment } from 'src/core/env';
 
 export const TokenServiceSymbol = Symbol('TokenService');
 
@@ -10,10 +11,10 @@ export class TokenService {
   constructor(private readonly _tokenStore: ITokenStorePort) {}
 
   public generateToken(payload: string | JSObject | Buffer): Jwt {
-    const accessToken = sign(payload, process.env.JWT_SECRET_ACCESS, {
+    const accessToken = sign(payload, environment.JWT_SECRET_ACCESS, {
       expiresIn: '30m',
     });
-    const refreshToken = sign(payload, process.env.JWT_SECRET_REFRESH, {
+    const refreshToken = sign(payload, environment.JWT_SECRET_REFRESH, {
       expiresIn: '30d',
     });
 
@@ -31,11 +32,11 @@ export class TokenService {
   }
 
   public async validateRefreshToken(token: string): Promise<UserEntity> {
-    return this.validateToken(token, process.env.JWT_SECRET_REFRESH);
+    return this.validateToken(token, environment.JWT_SECRET_REFRESH);
   }
 
   public async validateAcessToken(token: string): Promise<UserEntity> {
-    return this.validateToken(token, process.env.JWT_SECRET_ACCESS);
+    return this.validateToken(token, environment.JWT_SECRET_ACCESS);
   }
 
   private async validateToken(

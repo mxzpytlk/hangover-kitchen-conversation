@@ -2,6 +2,7 @@ import { MailService } from './mail.service';
 import { v4 } from 'uuid';
 import { ApiRoutes } from 'src/core/enums/api-route';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
+import { environment } from 'src/core/env';
 
 export const ActivationMailSymbol = Symbol('ActivationMailService');
 
@@ -12,7 +13,7 @@ export class ActivationMailService
 
   public async sendNotification(email: string): Promise<string> {
     const activationLink = v4();
-    const link = `${process.env.PORT}${ApiRoutes.ACTIVATE}${activationLink}`;
+    const link = `${environment.PORT}${ApiRoutes.ACTIVATE}${activationLink}`;
     await this._mailService.sendMail({
       recieverEmail: email,
       subject: 'Acount activation',

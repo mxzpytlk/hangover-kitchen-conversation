@@ -52,16 +52,17 @@ export class RoomService implements IRoomsUseCase {
   public async getRoom(
     roomId: RoomId,
     receiver?: UserEntity,
+    withoutVerification = false,
   ): Promise<RoomEntity> {
     const room = await this._roomsStore.getRoom(roomId);
-    if (room.hasUserAcces(receiver)) {
+    if (room.hasUserAcces(receiver) || withoutVerification) {
       return room;
     }
     throw Exception.PERMISSION_DENIED;
   }
 
   public async joinRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity> {
-    const room = await this.getRoom(roomId, user);
+    const room = await this.getRoom(roomId, user, true);
     if (room.hasUser(user)) {
       return room;
     }

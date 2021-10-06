@@ -1,7 +1,8 @@
 import { JSObject } from '../types';
 
 export class JSONUtils {
-  public static converToJsonObject(obj: JSObject): JSObject {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static converToJsonObject(obj: Record<string, any>): JSObject {
     const newObj = {};
     if (!obj) {
       return null;

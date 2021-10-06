@@ -1,5 +1,6 @@
 import { Exception } from 'src/core/shared/exception';
 import { RandomUtils } from 'src/core/utils/random.utils';
+import { NotificationType } from 'src/domain/notifications/notification.type';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { UserName } from 'src/domain/users/user.types';
@@ -13,11 +14,7 @@ export class RoomService implements IRoomsUseCase {
   constructor(
     private readonly _roomsStore: IRoomsStorePort,
     private readonly _roomUserStore: IRoomUserStorePort,
-    /**
-     * Оповещает админа о новых пользователях.
-     */
-    private readonly _newUserNotificator: INotificationPort<UserEntity>,
-    private readonly _roomEntryNotificator: INotificationPort<RoomEntity>,
+    private readonly _notificationPort: INotificationPort,
   ) {}
 
   public async createRoom(
@@ -75,7 +72,12 @@ export class RoomService implements IRoomsUseCase {
       await this._roomUserStore.addUser(room, user);
       return room;
     }
-    await this._newUserNotificator.sendNotification(room.admin.id, user);
+    await this._notificationPort.sendNotification(room.admin.id, {
+      type: NotificationType.USER_WANT_JOIN_ROOM,
+      value: {
+        userName: user.name,
+      },
+    });
   }
 
   public async letUserIn(
@@ -90,7 +92,13 @@ export class RoomService implements IRoomsUseCase {
     if (!room.admin.equals(admin)) {
       throw Exception.PERMISSION_DENIED;
     }
-    await this._roomEntryNotificator.sendNotification(userName, room);
+    await this._notificationPort.sendNotification(userName, {
+      type: NotificationType.ROOM_ACCESS_ALOWED,
+      value: {
+        roomTitle: room.title,
+        roomId,
+      },
+    });
     await this._roomUserStore.addUser(room, userName);
   }
 

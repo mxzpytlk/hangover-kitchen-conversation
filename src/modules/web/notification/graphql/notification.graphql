@@ -1,0 +1,25 @@
+type UserNotification {
+  userName: String!
+}
+
+type RoomNotification {
+  roomTitle: String!
+  roomId: String!
+}
+
+union NotificationValue = UserNotification | RoomNotification
+
+enum NotificationType {
+  USER_WANT_JOIN_ROOM
+  ROOM_ACCESS_ALOWED
+  UNKNOWN
+}
+
+type Notification {
+  type: NotificationType
+  value: NotificationValue
+}
+
+type Subscription {
+  notify: Notification
+}

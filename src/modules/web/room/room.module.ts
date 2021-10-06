@@ -19,7 +19,6 @@ import { RoomResolver } from './graphql/room.resolver';
           roomPersistanceAdapter,
           userRoomPersistanceAdapter,
           null,
-          null,
         ),
       inject: [RoomPersistanceAdapter, UserRoomPersistanceAdapter],
     },

@@ -5,9 +5,18 @@ import { AuthModule } from './auth/auth.module';
 import { AppGuard } from './guards/app.guard';
 import { RoomModule } from './room/room.module';
 import { UserModule } from './user/user.module';
+import { NotificationModule } from './notification/notification.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
-  imports: [AuthModule, RoomModule, UserModule, TokenOrmModule],
+  imports: [
+    AuthModule,
+    RoomModule,
+    UserModule,
+    TokenOrmModule,
+    NotificationModule,
+    SubscriptionModule,
+  ],
   providers: [
     {
       provide: APP_GUARD,

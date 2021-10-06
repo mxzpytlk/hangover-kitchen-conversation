@@ -29,6 +29,12 @@ type TypeOrmDbType =
         outputAs: 'interface',
       },
       context: ({ req, res }) => ({ req, res }),
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': {
+          path: '/subscription',
+        },
+      },
     }),
     TypeOrmModule.forRoot({
       type: environment.ORM_TYPE as TypeOrmDbType,

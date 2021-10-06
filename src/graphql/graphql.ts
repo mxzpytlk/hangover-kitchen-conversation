@@ -12,6 +12,12 @@ export enum RegisterResult {
     FAILED = "FAILED"
 }
 
+export enum NotificationType {
+    USER_WANT_JOIN_ROOM = "USER_WANT_JOIN_ROOM",
+    ROOM_ACCESS_ALOWED = "ROOM_ACCESS_ALOWED",
+    UNKNOWN = "UNKNOWN"
+}
+
 export interface UpdateProfileInput {
     name?: Nullable<string>;
     description?: Nullable<string>;
@@ -39,6 +45,24 @@ export interface IMutation {
     updateProfileInfo(changes?: Nullable<UpdateProfileInput>): Nullable<Profile> | Promise<Nullable<Profile>>;
 }
 
+export interface UserNotification {
+    userName: string;
+}
+
+export interface RoomNotification {
+    roomTitle: string;
+    roomId: string;
+}
+
+export interface Notification {
+    type?: Nullable<NotificationType>;
+    value?: Nullable<NotificationValue>;
+}
+
+export interface ISubscription {
+    notify(): Nullable<Notification> | Promise<Nullable<Notification>>;
+}
+
 export interface Room {
     id: string;
     title: string;
@@ -60,4 +84,5 @@ export interface User {
     personalInfo?: Nullable<Profile>;
 }
 
+export type NotificationValue = UserNotification | RoomNotification;
 type Nullable<T> = T | null;

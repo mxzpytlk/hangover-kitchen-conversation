@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { NotificationOrmEntity } from '../notification-orm/notification.orm-entity';
 import { TokenOrmEntity } from '../token-orm/token.orm-entity';
 import { RoomOrmEntity } from '../user-room-orm/orm-entities/room.orm-entity';
 import { UserRoomOrmEntity } from '../user-room-orm/orm-entities/user-room.orm-entity';
@@ -35,6 +36,9 @@ export class UserOrmEntity {
 
   @OneToMany(() => UserRoomOrmEntity, (userRoom) => userRoom.user)
   public userRooms: UserRoomOrmEntity[];
+
+  @OneToMany(() => NotificationOrmEntity, (notification) => notification.user)
+  public notifications: NotificationOrmEntity[];
 
   public get rooms(): RoomOrmEntity[] {
     return this.userRooms?.map((userRoom) => userRoom.room);

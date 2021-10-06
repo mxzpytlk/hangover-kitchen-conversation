@@ -8,11 +8,13 @@ import { RegisterResult } from './auth.type';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { compare } from 'bcrypt';
 import { INotificationPort } from '../notifications/out/notification.port';
+import { RandomUtils } from 'src/core/utils/random.utils';
+import { NotificationType } from '../notifications/notification.type';
 
 export class AuthService implements IAuthUseCase {
   constructor(
     private readonly _userStore: IUserStorePort,
-    private readonly _emailNotificator: INotificationPort<undefined, string>,
+    private readonly _emailNotificator: INotificationPort<string>,
     private readonly _tokenService: TokenService,
   ) {}
 
@@ -25,7 +27,11 @@ export class AuthService implements IAuthUseCase {
       throw Exception.EMAIL_EXISTS;
     }
     const hashPass = await hash(password, 3);
-    const activationLink = await this._emailNotificator.sendNotification(email);
+    const activationLink = RandomUtils.randomString();
+    await this._emailNotificator.sendNotification(email, {
+      type: NotificationType.ACOUNT_ACTIVATION,
+      value: activationLink,
+    });
     const user = await this._userStore.saveUser(
       UserEntity.createNew(email, hashPass, activationLink),
     );

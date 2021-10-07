@@ -16,6 +16,9 @@ export type RedirectType = {
 type Context = {
   res: Response;
   req: Request;
+  connectionParams: {
+    authorization: string;
+  };
   user?: UserEntity;
 };
 

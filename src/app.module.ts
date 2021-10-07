@@ -28,7 +28,11 @@ type TypeOrmDbType =
         path: join(process.cwd(), 'src/graphql/graphql.ts'),
         outputAs: 'interface',
       },
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req, res, connectionParams }) => ({
+        req,
+        res,
+        connectionParams,
+      }),
       installSubscriptionHandlers: true,
       subscriptions: {
         'graphql-ws': {

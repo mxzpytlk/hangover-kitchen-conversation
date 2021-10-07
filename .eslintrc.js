@@ -19,4 +19,11 @@ module.exports = {
     'max-len': ['error', { code: 120 }],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
+  overrides: [
+    {
+      files: ['*.graphql'],
+      extends: 'plugin:@graphql-eslint/recommended',
+      rules: {},
+    },
+  ],
 };

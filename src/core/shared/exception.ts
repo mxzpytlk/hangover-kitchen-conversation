@@ -69,4 +69,11 @@ export class Exception extends Error {
       ExceptionTypes.PERMISSION_DENIED,
     );
   }
+
+  public static get NOT_ADMIN(): Exception {
+    return new Exception(
+      'User is not admin of room',
+      ExceptionTypes.PERMISSION_DENIED,
+    );
+  }
 }

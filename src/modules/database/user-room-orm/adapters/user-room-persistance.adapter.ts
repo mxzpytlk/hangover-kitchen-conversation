@@ -54,6 +54,17 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     await this._userRoomRepository.save(userRoom);
   }
 
+  public async getRoomsBelongUser(userId: string): Promise<RoomEntity[]> {
+    const userRooms = await this._userRoomRepository.find({
+      where: {
+        userId,
+        isAdmin: true,
+      },
+      relations: ['room'],
+    });
+    return userRooms?.map((userRoom) => RoomMapper.mapToDomain(userRoom.room));
+  }
+
   deleteUser(room: RoomEntity, userName: string): Promise<void> {
     throw new Error('Method not implemented.');
   }

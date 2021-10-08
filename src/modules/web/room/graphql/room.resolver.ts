@@ -6,8 +6,11 @@ import {
   IRoomsUseCase,
   RoomServiceSymbol,
 } from 'src/domain/rooms/in/rooms.use-case';
+import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { PersonalInfo } from 'src/domain/users/model/personal-info';
 import { Room } from 'src/graphql/graphql';
 import { WithoutAuth } from '../../auth/decorators/without-auth.decorator';
+import { WithoutProfileFullfiled } from '../../auth/decorators/without-profile-fullfiled';
 
 @Resolver()
 export class RoomResolver {
@@ -35,7 +38,7 @@ export class RoomResolver {
     );
   }
 
-  @Query()
+  @Query('allRooms')
   @WithoutAuth()
   public async getRooms(): Promise<Room[]> {
     const rooms = await this._roomUseCase.getRooms();
@@ -52,7 +55,7 @@ export class RoomResolver {
     });
   }
 
-  @Query()
+  @Query('room')
   @WithoutAuth(true)
   public async getRoom(
     @Context() context: GQLContext,
@@ -81,6 +84,22 @@ export class RoomResolver {
       limit,
       canSendAnonimusMessage,
     };
+  }
+
+  @Query('rooms')
+  @WithoutProfileFullfiled()
+  public async getUserRooms(@Context() ctx: GQLContext): Promise<RoomEntity[]> {
+    return this._roomUseCase.getRoomsBelongUser(ctx.user);
+  }
+
+  @Query('waitingUsers')
+  @WithoutProfileFullfiled()
+  public async getWaitingUsers(
+    @Context() ctx: GQLContext,
+    @Args('roomId') roomId: string,
+  ): Promise<PersonalInfo[]> {
+    const users = await this._roomUseCase.getWaitingUsers(ctx.user, roomId);
+    return users.map((user) => user.personalInfo);
   }
 
   @Mutation()

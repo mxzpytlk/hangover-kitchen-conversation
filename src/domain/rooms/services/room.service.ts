@@ -88,6 +88,17 @@ export class RoomService implements IRoomsUseCase {
     });
   }
 
+  public async getWaitingUsers(
+    receiver: UserEntity,
+    roomId: RoomId,
+  ): Promise<UserEntity[]> {
+    const room = await this.getRoom(roomId, receiver);
+    if (!room?.isAdmin(receiver)) {
+      throw Exception.NOT_ADMIN;
+    }
+    return room.waitingUsers;
+  }
+
   public async letUserIn(
     admin: UserEntity,
     userName: string,
@@ -123,6 +134,10 @@ export class RoomService implements IRoomsUseCase {
       throw Exception.PERMISSION_DENIED;
     }
     return this._roomUserStore.deleteUser(room, userName);
+  }
+
+  public async getRoomsBelongUser(user: UserEntity): Promise<RoomEntity[]> {
+    return this._roomUserStore.getRoomsBelongUser(user.id);
   }
 
   private compareRooms(first: RoomEntity, second: RoomEntity): number {

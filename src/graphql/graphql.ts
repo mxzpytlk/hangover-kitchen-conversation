@@ -31,8 +31,10 @@ export interface SuccessAuth {
 export interface IQuery {
     login(email: string, password: string): SuccessAuth | Promise<SuccessAuth>;
     getNotifications(from?: Nullable<number>, to?: Nullable<number>): Notification[] | Promise<Notification[]>;
-    getRooms(): Nullable<Room>[] | Promise<Nullable<Room>[]>;
-    getRoom(roomId: string): Room | Promise<Room>;
+    allRooms(): Room[] | Promise<Room[]>;
+    room(roomId: string): Room | Promise<Room>;
+    waitingUsers(roomId: string): Profile[] | Promise<Profile[]>;
+    rooms(): Room[] | Promise<Room[]>;
 }
 
 export interface IMutation {

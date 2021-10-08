@@ -31,9 +31,17 @@ type Mutation {
 }
 
 type Query {
-  getRooms: [Room]!
+  allRooms: [Room!]!
   """
   Если пользователь не имеет досутпа к комнате, то сервер возвращает ошибку PERMISSION_DENIED.
   """
-  getRoom(roomId: String!): Room!
+  room(roomId: String!): Room!
+  """
+  Возвращает пользователей, которые отправили запрос на вступление в закрытую комнату, но пока не получили подтверждения.
+  """
+  waitingUsers(roomId: String!): [Profile!]!
+  """
+  Возвращает комнаты, в которых пользователь является админом.
+  """
+  rooms: [Room!]!
 }

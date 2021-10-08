@@ -72,6 +72,10 @@ export class RoomEntity {
     return this._limit && this._limit <= this.users.length;
   }
 
+  public get waitingUsers(): UserEntity[] {
+    return this._users.waitingInvitation.map((user) => user.user);
+  }
+
   public hasUser(user: UserEntity): boolean {
     return this.users.some((userInRoom) => userInRoom.equals(user));
   }
@@ -84,6 +88,10 @@ export class RoomEntity {
     return this._users.waitingInvitation.some((waitingUser) =>
       waitingUser.equals(user),
     );
+  }
+
+  public isAdmin(user: UserEntity): boolean {
+    return this.admin.equals(user);
   }
 
   public hasUserAcces(user: UserEntity) {

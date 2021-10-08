@@ -17,6 +17,14 @@ type Mutation {
     canSendAnonimusMessage: Boolean
     limit: Int
   ): Room!
+  """
+  Запрос, по которому пользователь может присоединиться к комнате.
+  Если комната открытая, в ней хватает места и пользователь не был оттуда выгнан, то возвращается объект комнаты,
+  если комната закрыта и пользователь пытается присоединится второй раз, то возвращает ошибку PERMISSION_DENIED.
+  Если пользователь впервый раз отправляет запрос на вступление в закрытую комнату, то админу этой комнаты
+  приходит уведомление.
+  Если пользователь пытается во второй раз присоединится к закрытой комнате, то с сервера возвращается ошибка PERMISSION_DENIED.
+  """
   joinRoom(roomId: String!): Room
   letUserIn(userName: String!, roomId: String!): Boolean
   kickUser(userName: String!, roomId: String!): Boolean
@@ -24,5 +32,8 @@ type Mutation {
 
 type Query {
   getRooms: [Room]!
+  """
+  Если пользователь не имеет досутпа к комнате, то сервер возвращает ошибку PERMISSION_DENIED.
+  """
   getRoom(roomId: String!): Room!
 }

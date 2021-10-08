@@ -3,6 +3,7 @@ import { RandomUtils } from 'src/core/utils/random.utils';
 import { NotificationType } from 'src/domain/notifications/notification.type';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { IUserStorePort } from 'src/domain/users/out/user-store.port';
 import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity, RoomId } from '../entities/room.entity';
 import { UserRoomEntity } from '../entities/user-room.entity';
@@ -100,25 +101,29 @@ export class RoomService implements IRoomsUseCase {
   }
 
   public async letUserIn(
-    admin: UserEntity,
+    receiver: UserEntity,
     userName: string,
     roomId: RoomId,
   ): Promise<void> {
-    const room = await this.getRoom(roomId, admin);
+    const room = await this.getRoom(roomId, receiver);
     if (room.isFull) {
       throw Exception.ROOM_IS_FULL;
     }
-    if (!room.admin.equals(admin)) {
+    if (!room.isAdmin(receiver)) {
       throw Exception.PERMISSION_DENIED;
     }
-    await this._notificationPort.sendNotification(userName, {
+    const user = room.waitingUsers.find((user) => user.name === userName);
+    if (!user) {
+      throw Exception.USER_NOT_JOIN_ROOM;
+    }
+    await this._roomUserStore.setIsWaiting(room.id, user.id, false);
+    this._notificationPort.sendNotification(user.id, {
       type: NotificationType.ROOM_ACCESS_ALOWED,
       value: {
         roomTitle: room.title,
         roomId,
       },
     });
-    await this._roomUserStore.addUser(room, userName);
   }
 
   public async kickUser(

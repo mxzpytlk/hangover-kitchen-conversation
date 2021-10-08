@@ -70,6 +70,13 @@ export class Exception extends Error {
     );
   }
 
+  public static get USER_NOT_JOIN_ROOM(): Exception {
+    return new Exception(
+      'User has not sent request to join this room',
+      ExceptionTypes.PERMISSION_DENIED,
+    );
+  }
+
   public static get NOT_ADMIN(): Exception {
     return new Exception(
       'User is not admin of room',

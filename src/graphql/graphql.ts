@@ -14,7 +14,7 @@ export enum RegisterResult {
 
 export enum NotificationType {
     USER_WANT_JOIN_ROOM = "USER_WANT_JOIN_ROOM",
-    ROOM_ACCESS_ALOWED = "ROOM_ACCESS_ALOWED",
+    ROOM_ACCESS_ALLOWED = "ROOM_ACCESS_ALLOWED",
     UNKNOWN = "UNKNOWN"
 }
 
@@ -34,7 +34,7 @@ export interface IQuery {
     allRooms(): Room[] | Promise<Room[]>;
     room(roomId: string): Room | Promise<Room>;
     waitingUsers(roomId: string): Profile[] | Promise<Profile[]>;
-    rooms(): Room[] | Promise<Room[]>;
+    managedRooms(): Room[] | Promise<Room[]>;
 }
 
 export interface IMutation {

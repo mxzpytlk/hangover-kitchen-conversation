@@ -6,7 +6,6 @@ import {
   IRoomsUseCase,
   RoomServiceSymbol,
 } from 'src/domain/rooms/in/rooms.use-case';
-import { UserEntity } from 'src/domain/users/entities/user.entity';
 import { PersonalInfo } from 'src/domain/users/model/personal-info';
 import { Room } from 'src/graphql/graphql';
 import { WithoutAuth } from '../../auth/decorators/without-auth.decorator';
@@ -86,7 +85,7 @@ export class RoomResolver {
     };
   }
 
-  @Query('rooms')
+  @Query('managedRooms')
   @WithoutProfileFullfiled()
   public async getUserRooms(@Context() ctx: GQLContext): Promise<RoomEntity[]> {
     return this._roomUseCase.getRoomsBelongUser(ctx.user);
@@ -135,5 +134,16 @@ export class RoomResolver {
       limit,
       canSendAnonimusMessage,
     };
+  }
+
+  @Mutation()
+  @WithoutProfileFullfiled()
+  public async letUserIn(
+    @Context() ctx: GQLContext,
+    @Args('userName') userName: string,
+    @Args('roomId') roomId: string,
+  ): Promise<boolean> {
+    await this._roomUseCase.letUserIn(ctx.user, userName, roomId);
+    return true;
   }
 }

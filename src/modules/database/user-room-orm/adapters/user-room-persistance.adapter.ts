@@ -65,6 +65,22 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     return userRooms?.map((userRoom) => RoomMapper.mapToDomain(userRoom.room));
   }
 
+  public async setIsWaiting(
+    roomId: string,
+    userId: string,
+    isWaitingInvitation: boolean,
+  ): Promise<void> {
+    await this._userRoomRepository.update(
+      {
+        roomId,
+        userId,
+      },
+      {
+        isWaitingInvitation,
+      },
+    );
+  }
+
   deleteUser(room: RoomEntity, userName: string): Promise<void> {
     throw new Error('Method not implemented.');
   }

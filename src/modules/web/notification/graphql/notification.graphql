@@ -22,7 +22,7 @@ enum NotificationType {
   Уведомление пользоваетля о том, что ему разрешили присоединиться к комнате.
   В value лежит RoomNotification.
   """
-  ROOM_ACCESS_ALOWED
+  ROOM_ACCESS_ALLOWED
   UNKNOWN
 }
 

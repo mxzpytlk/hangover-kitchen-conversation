@@ -4,12 +4,12 @@ import { SubscriptionTrigger } from 'src/core/enums/subscription-trigger.enum';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 import { Notification } from 'src/domain/notifications/notification.type';
 import { UserId } from 'src/domain/users/entities/user.entity';
-import { INotificationStorePort } from 'src/domain/notifications/out/notufucation-store.port';
+import { INotificationStorePort } from 'src/domain/notifications/out/notufication-store.port';
 
 export const NotificationServiceSymbol = Symbol('NotificationService');
 
 @Injectable()
-export class NotificationService implements INotificationPort {
+export class NotificationWebService implements INotificationPort {
   constructor(
     private readonly _pubSub: PubSub,
     private readonly _notificationStorePort: INotificationStorePort,

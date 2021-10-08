@@ -23,3 +23,7 @@ type Notification {
 type Subscription {
   notify: Notification
 }
+
+type Query {
+  getNotifications(from: Int, to: Int): [Notification!]!
+}

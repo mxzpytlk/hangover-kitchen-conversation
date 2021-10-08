@@ -11,21 +11,21 @@ import {
   ActivationMailSymbol,
 } from './services/activation-mail.service';
 import {
-  NotificationService,
+  NotificationWebService,
   NotificationServiceSymbol,
 } from './services/notification.service';
 
 @Module({
   imports: [NotificationOrmModule, MailModule],
   providers: [
-    NotificationResolver,
     NotificationValueResolver,
+    NotificationResolver,
     {
       provide: NotificationServiceSymbol,
       useFactory: (
         pubSub: PubSub,
         notificationPersistanceAdapter: NotificationPersistanceAdapter,
-      ) => new NotificationService(pubSub, notificationPersistanceAdapter),
+      ) => new NotificationWebService(pubSub, notificationPersistanceAdapter),
       inject: [PubSub, NotificationPersistanceAdapter],
     },
     {

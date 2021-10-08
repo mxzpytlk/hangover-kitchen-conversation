@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RandomUtils } from 'src/core/utils/random.utils';
 import { Notification } from 'src/domain/notifications/notification.type';
-import { INotificationStorePort } from 'src/domain/notifications/out/notufucation-store.port';
+import { INotificationStorePort } from 'src/domain/notifications/out/notufication-store.port';
 import { UserId } from 'src/domain/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { NotificationMapper } from './notification-mapper';
@@ -25,5 +25,12 @@ export class NotificationPersistanceAdapter implements INotificationStorePort {
       userId,
     );
     await this._notificationRepository.save(notificationOrm);
+  }
+
+  public async getNotifications(userId: string): Promise<Notification[]> {
+    const notifications = await this._notificationRepository.find({
+      userId,
+    });
+    return notifications.map(NotificationMapper.mapToDomain);
   }
 }

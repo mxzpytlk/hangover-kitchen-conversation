@@ -30,6 +30,7 @@ export interface SuccessAuth {
 
 export interface IQuery {
     login(email: string, password: string): SuccessAuth | Promise<SuccessAuth>;
+    getNotifications(from?: Nullable<number>, to?: Nullable<number>): Notification[] | Promise<Notification[]>;
     getRooms(): Nullable<Room>[] | Promise<Nullable<Room>[]>;
     getRoom(roomId: string): Room | Promise<Room>;
 }

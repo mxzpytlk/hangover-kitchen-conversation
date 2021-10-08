@@ -32,4 +32,19 @@ export class NotificationMapper {
     notificationOrm.userId = userId;
     return notificationOrm;
   }
+
+  public static mapToDomain(
+    notificationOrm: NotificationOrmEntity,
+  ): Notification {
+    let value;
+    try {
+      value = JSON.parse(notificationOrm.notification);
+    } catch (_) {
+      value = notificationOrm.notification;
+    }
+    return {
+      type: notificationOrm.type,
+      value: value,
+    };
+  }
 }

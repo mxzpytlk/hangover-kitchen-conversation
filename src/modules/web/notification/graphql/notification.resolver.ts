@@ -1,4 +1,4 @@
-import { Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Context, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTrigger } from 'src/core/enums/subscription-trigger.enum';
 import { Notification } from 'src/domain/notifications/notification.type';
@@ -9,6 +9,10 @@ import {
   NotificationValue as GqlNotificationValue,
 } from 'src/graphql/graphql';
 import { GQLContext } from 'src/core/types';
+import { INotificationStorePort } from 'src/domain/notifications/out/notufication-store.port';
+import { WithoutProfileFullfiled } from '../../auth/decorators/without-profile-fullfiled';
+import { Inject } from '@nestjs/common';
+import { NotificationPersistanceAdapter } from 'src/modules/database/notification-orm/notification-persistance.adapter';
 
 type SubscriptionPayload = {
   userId: UserId;
@@ -17,14 +21,33 @@ type SubscriptionPayload = {
 
 @Resolver()
 export class NotificationResolver {
-  constructor(private readonly _pubSub: PubSub) {}
+  constructor(
+    private readonly _pubSub: PubSub,
+    @Inject(NotificationPersistanceAdapter)
+    private readonly _notificationStore: INotificationStorePort,
+  ) {}
+
+  @Query()
+  @WithoutProfileFullfiled()
+  public async getNotifications(
+    @Context() ctx: GQLContext,
+    @Args('from') from?: number,
+    @Args('to') to?: number,
+  ): Promise<GqlNotification[]> {
+    const userId = ctx.user?.id;
+    const notifications = await this._notificationStore.getNotifications(
+      userId,
+    );
+
+    return notifications.slice(from, to).map(this.mapNotification);
+  }
 
   @Subscription('notify', {
     filter(this: NotificationResolver, payload, _, ctx) {
       return this.filterSubscription(payload, ctx);
     },
-    resolve(this: NotificationResolver, payload) {
-      return this.resolveSubscriptionInput(payload);
+    resolve(this: NotificationResolver, payload: SubscriptionPayload) {
+      return this.mapNotification(payload.notification);
     },
   })
   public notify(): AsyncIterator<SubscriptionPayload> {
@@ -37,10 +60,7 @@ export class NotificationResolver {
     return ctx.user?.id === payload.userId;
   }
 
-  private resolveSubscriptionInput(
-    payload: SubscriptionPayload,
-  ): GqlNotification {
-    const notification = payload.notification;
+  private mapNotification(notification: Notification): GqlNotification {
     return {
       type: notification.type.toUpperCase() as GqlNotificationType,
       value: notification.value as unknown as GqlNotificationValue,

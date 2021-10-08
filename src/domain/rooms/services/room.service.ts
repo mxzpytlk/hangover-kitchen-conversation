@@ -34,13 +34,14 @@ export class RoomService implements IRoomsUseCase {
       {
         admin: new UserRoomEntity(admin),
         commonUsers: [],
+        waitingInvitation: [],
       },
       isOpen,
       canSendAnonimusMessage,
       limit,
       description,
     );
-    return this._roomUserStore.createRoom(room);
+    return this._roomUserStore.saveRoom(room);
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -69,8 +70,14 @@ export class RoomService implements IRoomsUseCase {
     if (room.isFull) {
       throw Exception.ROOM_IS_FULL;
     }
+    if (room.isUserWaitInvitation(user)) {
+      throw Exception.ALREADY_TRY_JOIN;
+    }
+    if (room.isCLose) {
+      room.addUserInQueue(user);
+    }
+    await this._roomUserStore.addUser(room, user);
     if (room.isOpen) {
-      await this._roomUserStore.addUser(room, user);
       return room;
     }
     await this._notificationPort.sendNotification(room.admin.id, {

@@ -1,4 +1,4 @@
-import { RoomEntity, RoomId } from 'src/domain/rooms/entities/room.entity';
+import { RoomEntity } from 'src/domain/rooms/entities/room.entity';
 import { UserRoomEntity } from 'src/domain/rooms/entities/user-room.entity';
 import { UserMapper } from '../../user-orm/user.mapper';
 import { UserRoomOrmEntity } from '../orm-entities/user-room.orm-entity';
@@ -30,12 +30,13 @@ export class UserRoomMapper {
 
   public static mapUserToOrm(
     user: UserRoomEntity,
-    room: RoomId,
+    room: RoomEntity,
   ): UserRoomOrmEntity {
     const userRoomOrm = new UserRoomOrmEntity();
-    userRoomOrm.roomId = room;
+    userRoomOrm.roomId = room.id;
     const userOrm = UserMapper.mapToOrmEntity(user.user);
     userRoomOrm.user = userOrm;
+    userRoomOrm.isWaitingInvitation = room.isUserWaitInvitation(user.user);
     userRoomOrm.isNotificationsOn = user.isNotificationsOn;
 
     return userRoomOrm;

@@ -19,7 +19,7 @@ export class RoomMapper {
     return roomOrm;
   }
 
-  public static mapToDOmain(roomOrm: RoomOrmEntity): RoomEntity {
+  public static mapToDomain(roomOrm: RoomOrmEntity): RoomEntity {
     const users: UsersInRoom = RoomMapper.mapOrmToUsersRoomDomain(
       roomOrm.userRooms,
     );
@@ -43,16 +43,20 @@ export class RoomMapper {
       return null;
     }
     let admin: UserRoomEntity;
-    const users: UserRoomEntity[] = [];
+    const commonUsers: UserRoomEntity[] = [];
+    const usersInQueue: UserRoomEntity[] = [];
     userRooms.forEach((userRoom) => {
       const user = UserRoomMapper.mapUserToDomain(userRoom);
       if (userRoom.isAdmin) {
         admin = user;
         return;
+      } else if (userRoom.isWaitingInvitation) {
+        usersInQueue.push(user);
+      } else {
+        commonUsers.push(user);
       }
-      users.push(user);
     });
 
-    return { admin, commonUsers: users };
+    return { admin, commonUsers, waitingInvitation: usersInQueue };
   }
 }

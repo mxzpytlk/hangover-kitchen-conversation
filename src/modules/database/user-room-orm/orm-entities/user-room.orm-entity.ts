@@ -27,6 +27,11 @@ export class UserRoomOrmEntity {
   })
   public isNotificationsOn: boolean;
 
+  @Column({
+    name: 'is_waiting_invitation',
+  })
+  public isWaitingInvitation: boolean;
+
   @ManyToOne(() => RoomOrmEntity, (room) => room.id)
   @JoinColumn({
     name: 'room_id',

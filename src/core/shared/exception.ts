@@ -62,4 +62,11 @@ export class Exception extends Error {
       ExceptionTypes.USER_INPUT,
     );
   }
+
+  public static get ALREADY_TRY_JOIN(): Exception {
+    return new Exception(
+      'User has already tried to join room',
+      ExceptionTypes.PERMISSION_DENIED,
+    );
+  }
 }

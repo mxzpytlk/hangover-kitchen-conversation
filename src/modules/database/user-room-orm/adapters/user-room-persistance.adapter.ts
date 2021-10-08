@@ -20,17 +20,16 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     private readonly _userRoomRepository: Repository<UserRoomOrmEntity>,
   ) {}
 
-  public async createRoom(room: RoomEntity): Promise<RoomEntity> {
+  public async saveRoom(room: RoomEntity): Promise<RoomEntity> {
     const roomSaveResult = await this._roomRepository.save(room);
+    const createdRoom = RoomMapper.mapToDomain(roomSaveResult);
     const admin = room.admin;
-    const adminOrm = UserRoomMapper.mapUserToOrm(admin, roomSaveResult.id);
+    const adminOrm = UserRoomMapper.mapUserToOrm(admin, createdRoom);
     adminOrm.isAdmin = true;
     roomSaveResult.userRooms = [adminOrm];
 
-    const createdRoom = RoomMapper.mapToDOmain(roomSaveResult);
-
     const userRoom = UserRoomMapper.mapToOrm(
-      new UserRoomEntity(admin.user, true),
+      new UserRoomEntity(admin.user),
       createdRoom,
       RandomUtils.randomString(16),
     );
@@ -47,7 +46,7 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
       typeof user === 'string' ? new UserEntity(user, null, null, null) : user;
 
     const userRoom = UserRoomMapper.mapToOrm(
-      new UserRoomEntity(userEntity, true),
+      new UserRoomEntity(userEntity),
       room,
       RandomUtils.randomString(16),
     );

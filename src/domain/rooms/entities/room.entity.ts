@@ -35,6 +35,10 @@ export class RoomEntity {
     return this._isOpen;
   }
 
+  public get isCLose(): boolean {
+    return !this.isOpen;
+  }
+
   public get canSendAnonimusMessage(): boolean {
     return this._canSendAnonimusMessage;
   }
@@ -70,6 +74,16 @@ export class RoomEntity {
 
   public hasUser(user: UserEntity): boolean {
     return this.users.some((userInRoom) => userInRoom.equals(user));
+  }
+
+  public addUserInQueue(userEntity): void {
+    this._users.waitingInvitation.push(new UserRoomEntity(userEntity));
+  }
+
+  public isUserWaitInvitation(user: UserEntity): boolean {
+    return this._users.waitingInvitation.some((waitingUser) =>
+      waitingUser.equals(user),
+    );
   }
 
   public hasUserAcces(user: UserEntity) {

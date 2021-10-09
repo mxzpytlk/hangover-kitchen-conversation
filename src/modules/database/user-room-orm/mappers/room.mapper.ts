@@ -23,6 +23,7 @@ export class RoomMapper {
     const users: UsersInRoom = RoomMapper.mapOrmToUsersRoomDomain(
       roomOrm.userRooms,
     );
+
     return new RoomEntity(
       roomOrm.id,
       roomOrm.title,
@@ -40,7 +41,11 @@ export class RoomMapper {
     userRooms: UserRoomOrmEntity[],
   ): UsersInRoom {
     if (!userRooms) {
-      return null;
+      return {
+        admin: null,
+        commonUsers: [],
+        waitingInvitation: [],
+      };
     }
     let admin: UserRoomEntity;
     const commonUsers: UserRoomEntity[] = [];

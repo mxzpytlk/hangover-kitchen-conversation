@@ -100,6 +100,14 @@ export class RoomEntity {
     );
   }
 
+  public addUser(user: UserRoomEntity, isAdmin?: boolean): void {
+    if (isAdmin) {
+      this._users.admin = user;
+    } else {
+      this._users.commonUsers.push(user);
+    }
+  }
+
   private getMessagePopularity(message: MessageEntity) {
     return 1 / DateUtils.daysBetweenDates(message.date, this._date);
   }

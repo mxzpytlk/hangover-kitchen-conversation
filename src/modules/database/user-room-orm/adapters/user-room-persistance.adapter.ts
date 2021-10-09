@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JSObject } from 'src/core/types';
 import { RandomUtils } from 'src/core/utils/random.utils';
 import { RoomEntity } from 'src/domain/rooms/entities/room.entity';
 import { UserRoomEntity } from 'src/domain/rooms/entities/user-room.entity';
@@ -54,15 +55,21 @@ export class UserRoomPersistanceAdapter implements IRoomUserStorePort {
     await this._userRoomRepository.save(userRoom);
   }
 
-  public async getRoomsBelongUser(userId: string): Promise<RoomEntity[]> {
+  public async getUserRooms(
+    userId: string,
+    isAdmin?: boolean,
+  ): Promise<RoomEntity[]> {
+    const where: JSObject = { userId };
+    if (isAdmin !== undefined) {
+      where.isAdmin = isAdmin;
+    }
+
     const userRooms = await this._userRoomRepository.find({
-      where: {
-        userId,
-        isAdmin: true,
-      },
-      relations: ['room'],
+      where,
+      relations: ['user', 'room', 'room.userRooms', 'room.userRooms.user'],
     });
-    return userRooms?.map((userRoom) => RoomMapper.mapToDomain(userRoom.room));
+
+    return UserRoomMapper.mapToRoomDomainArr(userRooms);
   }
 
   public async setIsWaiting(

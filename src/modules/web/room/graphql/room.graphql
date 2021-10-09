@@ -7,7 +7,7 @@ type Room {
   canSendAnonimusMessage: Boolean
   limit: Int
   participantsCount: Int
-  users: [Profile!]!
+  users: [Profile!]
 }
 
 type Mutation {
@@ -55,5 +55,8 @@ type Query {
   Возвращает комнаты, в которых пользователь является админом.
   """
   managedRooms: [Room!]!
-  ownRooms: [Room!]!
+  """
+  Возвращает все комнаты, в которые входит пользователь.
+  """
+  ownRooms(from: Int, to: Int): [Room!]!
 }

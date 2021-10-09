@@ -32,15 +32,17 @@ export class UserRoomOrmEntity {
   })
   public isWaitingInvitation: boolean;
 
-  @ManyToOne(() => RoomOrmEntity, (room) => room.id)
+  @ManyToOne(() => RoomOrmEntity, (room) => room.userRooms)
   @JoinColumn({
     name: 'room_id',
+    referencedColumnName: 'id',
   })
   public room: RoomOrmEntity;
 
-  @ManyToOne(() => UserOrmEntity, (user) => user.id)
+  @ManyToOne(() => UserOrmEntity, (user) => user.userRooms)
   @JoinColumn({
     name: 'user_id',
+    referencedColumnName: 'id',
   })
   public user: UserOrmEntity;
 }

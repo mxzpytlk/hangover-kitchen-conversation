@@ -15,6 +15,7 @@ export interface IRoomsUseCase {
   getRooms(): Promise<RoomEntity[]>;
   getRoom(id: RoomId, receiver?: UserEntity): Promise<RoomEntity>;
   getRoomsBelongUser(user: UserEntity): Promise<RoomEntity[]>;
+  getRoomsWithUser(user: UserEntity): Promise<RoomEntity[]>;
   getWaitingUsers(receiver: UserEntity, roomId: RoomId): Promise<UserEntity[]>;
   joinRoom(user: UserEntity, roomId: RoomId): Promise<RoomEntity>;
   letUserIn(admin: UserEntity, userId: UserId, roomId: RoomId): Promise<void>;

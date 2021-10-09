@@ -3,7 +3,6 @@ import { RandomUtils } from 'src/core/utils/random.utils';
 import { NotificationType } from 'src/domain/notifications/notification.type';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
 import { UserEntity } from 'src/domain/users/entities/user.entity';
-import { IUserStorePort } from 'src/domain/users/out/user-store.port';
 import { UserName } from 'src/domain/users/user.types';
 import { RoomEntity, RoomId } from '../entities/room.entity';
 import { UserRoomEntity } from '../entities/user-room.entity';
@@ -142,7 +141,11 @@ export class RoomService implements IRoomsUseCase {
   }
 
   public async getRoomsBelongUser(user: UserEntity): Promise<RoomEntity[]> {
-    return this._roomUserStore.getRoomsBelongUser(user.id);
+    return this._roomUserStore.getUserRooms(user.id, true);
+  }
+
+  public async getRoomsWithUser(user: UserEntity): Promise<RoomEntity[]> {
+    return this._roomUserStore.getUserRooms(user.id);
   }
 
   private compareRooms(first: RoomEntity, second: RoomEntity): number {

@@ -39,9 +39,12 @@ export class RoomResolver {
 
   @Query('allRooms')
   @WithoutAuth()
-  public async getRooms(): Promise<Room[]> {
+  public async getRooms(
+    @Args('from') from: number,
+    @Args('to') to: number,
+  ): Promise<Room[]> {
     const rooms = await this._roomUseCase.getRooms();
-    return rooms.map((room) => {
+    return rooms.slice(from, to).map((room) => {
       const { id, title, isOpen, users, limit } = room;
 
       return {
@@ -87,8 +90,32 @@ export class RoomResolver {
 
   @Query('managedRooms')
   @WithoutProfileFullfiled()
-  public async getUserRooms(@Context() ctx: GQLContext): Promise<RoomEntity[]> {
-    return this._roomUseCase.getRoomsBelongUser(ctx.user);
+  public async getUserRooms(@Context() ctx: GQLContext): Promise<Room[]> {
+    const rooms = await this._roomUseCase.getRoomsBelongUser(ctx.user);
+    return rooms.map((room) => {
+      const {
+        id,
+        title,
+        isOpen,
+        description,
+        users,
+        date,
+        canSendAnonimusMessage,
+        limit,
+      } = room;
+
+      return {
+        id,
+        title,
+        isOpen,
+        description,
+        users: users.map((user) => user.user),
+        date: date.toISOString(),
+        canSendAnonimusMessage,
+        limit,
+        participantsCount: users.length,
+      };
+    });
   }
 
   @Query('waitingUsers')
@@ -145,5 +172,40 @@ export class RoomResolver {
   ): Promise<boolean> {
     await this._roomUseCase.letUserIn(ctx.user, userName, roomId);
     return true;
+  }
+
+  @Query('ownRooms')
+  @WithoutProfileFullfiled()
+  public async getOwnRooms(
+    @Context() ctx: GQLContext,
+    @Args('from') from: number,
+    @Args('to') to: number,
+  ): Promise<Room[]> {
+    const rooms = await this._roomUseCase.getRoomsWithUser(ctx.user);
+
+    return rooms.slice(from, to).map((room) => {
+      const {
+        id,
+        title,
+        isOpen,
+        description,
+        users,
+        date,
+        canSendAnonimusMessage,
+        limit,
+      } = room;
+
+      return {
+        id,
+        title,
+        isOpen,
+        description,
+        users: users.map((user) => user.user),
+        date: date.toISOString(),
+        canSendAnonimusMessage,
+        limit,
+        participantsCount: users.length,
+      };
+    });
   }
 }

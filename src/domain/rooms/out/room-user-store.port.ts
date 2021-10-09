@@ -6,7 +6,7 @@ export interface IRoomUserStorePort {
   saveRoom(room: RoomEntity): Promise<RoomEntity>;
   addUser(room: RoomEntity, user: UserEntity | UserName): Promise<void>;
   deleteUser(room: RoomEntity, userName: UserName): Promise<void>;
-  getRoomsBelongUser(userId: UserId): Promise<RoomEntity[]>;
+  getUserRooms(userId: UserId, isAdmin?: boolean): Promise<RoomEntity[]>;
   setIsWaiting(
     roomId: RoomId,
     userId: UserId,

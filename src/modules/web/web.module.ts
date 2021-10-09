@@ -7,6 +7,7 @@ import { RoomModule } from './room/room.module';
 import { UserModule } from './user/user.module';
 import { NotificationModule } from './notification/notification.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     TokenOrmModule,
     NotificationModule,
     SubscriptionModule,
+    MessageModule,
   ],
   providers: [
     {

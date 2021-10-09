@@ -7,6 +7,7 @@ type Room {
   canSendAnonimusMessage: Boolean
   limit: Int
   participantsCount: Int
+  users: [Profile!]!
 }
 
 type Mutation {
@@ -33,10 +34,15 @@ type Mutation {
   """
   letUserIn(userName: String!, roomId: String!): Boolean
   kickUser(userName: String!, roomId: String!): Boolean
+  leaveRoom(roomId: String): Boolean
 }
 
 type Query {
-  allRooms: [Room!]!
+  """
+  From и to диапозон порядковых значений, внутри которого будут возвращаться уведомления. Отсутствие какого-либо параметра сервер 
+  расценивает, как верхнюю/нижнюю границу.
+  """
+  allRooms(from: Int, to: Int): [Room!]!
   """
   Если пользователь не имеет досутпа к комнате, то сервер возвращает ошибку PERMISSION_DENIED.
   """
@@ -49,4 +55,5 @@ type Query {
   Возвращает комнаты, в которых пользователь является админом.
   """
   managedRooms: [Room!]!
+  ownRooms: [Room!]!
 }

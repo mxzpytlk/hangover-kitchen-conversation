@@ -1,0 +1,26 @@
+enum MessageType {
+  TEXT
+  FILE
+  REPLY
+}
+
+type Message {
+  date: String!
+  receiver: Profile
+  type: MessageType
+  content: String
+}
+
+input SendMessageInput {
+  roomId: String
+  type: MessageType
+  content: String
+}
+
+type Query {
+  messages(roomId: String): [Message!]!
+}
+
+type Mutation {
+  sendMessage(input: SendMessageInput): Boolean
+}

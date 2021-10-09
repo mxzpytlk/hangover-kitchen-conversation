@@ -7,10 +7,15 @@ type RoomNotification {
   roomId: String!
 }
 
+type MessageNotification {
+  roomTitle: String!
+  message: Message
+}
+
 """
 Объекты, которые могут лежать внутри Notification. Клиент сам должен обработать их и вывести нужное сообщение.
 """
-union NotificationValue = UserNotification | RoomNotification
+union NotificationValue = UserNotification | RoomNotification | MessageNotification
 
 enum NotificationType {
   """
@@ -23,6 +28,7 @@ enum NotificationType {
   В value лежит RoomNotification.
   """
   ROOM_ACCESS_ALLOWED
+  MESSAGE_RECIEVED
   UNKNOWN
 }
 

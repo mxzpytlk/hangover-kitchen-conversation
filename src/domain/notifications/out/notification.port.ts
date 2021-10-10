@@ -3,7 +3,7 @@ import { Notification, NotificationValue } from '../notification.type';
 
 export interface INotificationPort<T extends NotificationValue = JSObject> {
   sendNotification(
-    requisites: string,
+    requisites: string | string[],
     notification: Notification<T>,
   ): Promise<void>;
 }

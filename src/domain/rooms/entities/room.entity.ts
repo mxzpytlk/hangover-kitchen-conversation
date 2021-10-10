@@ -1,7 +1,7 @@
 import { DateUtils } from 'src/core/utils/date.utils';
-import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { MessageEntity } from 'src/domain/message/entities/message.entity';
+import { UserEntity, UserId } from 'src/domain/users/entities/user.entity';
 import { UsersInRoom } from '../room.type';
-import { MessageEntity } from './message.entity';
 import { UserRoomEntity } from './user-room.entity';
 
 export type RoomId = string;
@@ -74,6 +74,15 @@ export class RoomEntity {
 
   public get waitingUsers(): UserEntity[] {
     return this._users.waitingInvitation.map((user) => user.user);
+  }
+
+  public get userWithNotificationsIds(): UserId[] {
+    return this.users.reduce((userIds: UserId[], user) => {
+      if (user.isNotificationsOn) {
+        userIds.push(user.user.id);
+      }
+      return userIds;
+    }, []);
   }
 
   public hasUser(user: UserEntity): boolean {

@@ -83,4 +83,11 @@ export class Exception extends Error {
       ExceptionTypes.PERMISSION_DENIED,
     );
   }
+
+  public static get NOT_ANONIMUS_MESSAGE(): Exception {
+    return new Exception(
+      'Room does not support anonimus message',
+      ExceptionTypes.USER_INPUT,
+    );
+  }
 }

@@ -8,7 +8,7 @@ export class MessageEntity {
     private readonly _id: MessageId,
     private readonly _text: string,
     private readonly _date: Date,
-    private readonly _replyOn?: MessageId,
+    private readonly _repliedId?: MessageId,
     private readonly _files?: HKCFile[],
     private readonly _authorId?: UserId,
   ) {}
@@ -25,8 +25,8 @@ export class MessageEntity {
     return this._date;
   }
 
-  public get replyOn(): MessageId {
-    return this._replyOn;
+  public get repliedId(): MessageId {
+    return this._repliedId;
   }
 
   public get authorId(): UserId {

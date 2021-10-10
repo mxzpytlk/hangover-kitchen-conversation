@@ -58,8 +58,10 @@ export class MessageService implements IMessageUseCase {
       value: notificationValue,
     });
 
-    if (message.replyOn) {
-      const replyOn = await this._messageStorePort.getMessage(message.replyOn);
+    if (message.repliedId) {
+      const replyOn = await this._messageStorePort.getMessage(
+        message.repliedId,
+      );
       if (replyOn.authorId) {
         this._notificator.sendNotification(replyOn.authorId, {
           type: NotificationType.MESSAGE_REPLY,

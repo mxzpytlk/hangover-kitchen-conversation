@@ -7,7 +7,7 @@ export interface IMessageStorePort {
   saveMessage(
     text: string,
     roomId: RoomId,
-    replyOn?: MessageId,
+    repliedId?: MessageId,
     files?: HKCFile[],
     senderId?: UserId,
   ): Promise<MessageEntity>;

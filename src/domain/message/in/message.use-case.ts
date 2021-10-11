@@ -12,4 +12,5 @@ export interface IMessageUseCase {
     files?: HKCFile[],
     author?: UserEntity,
   ): Promise<MessageEntity>;
+  getMessages(roomId: RoomId, user?: UserEntity): Promise<MessageEntity[]>;
 }

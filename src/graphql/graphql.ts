@@ -40,7 +40,7 @@ export interface SuccessAuth {
 
 export interface IQuery {
     login(email: string, password: string): SuccessAuth | Promise<SuccessAuth>;
-    messages(roomId: string): Message[] | Promise<Message[]>;
+    messages(roomId: string, from?: Nullable<number>, to?: Nullable<number>): Message[] | Promise<Message[]>;
     notifications(from?: Nullable<number>, to?: Nullable<number>): Notification[] | Promise<Notification[]>;
     allRooms(from?: Nullable<number>, to?: Nullable<number>): Room[] | Promise<Room[]>;
     room(roomId: string): Room | Promise<Room>;
@@ -71,6 +71,11 @@ export interface Message {
     repliedId?: Nullable<string>;
 }
 
+export interface ISubscription {
+    newMessages(roomId?: Nullable<string>): Nullable<Message> | Promise<Nullable<Message>>;
+    notify(): Nullable<Notification> | Promise<Nullable<Notification>>;
+}
+
 export interface UserNotification {
     userName: string;
 }
@@ -90,10 +95,6 @@ export interface MessageNotification {
 export interface Notification {
     type?: Nullable<NotificationType>;
     value?: Nullable<NotificationValue>;
-}
-
-export interface ISubscription {
-    notify(): Nullable<Notification> | Promise<Nullable<Notification>>;
 }
 
 export interface Room {

@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { GQLContext } from 'src/core/types';
 import { MessageEntity } from 'src/domain/message/entities/message.entity';
 import { IMessageUseCase } from 'src/domain/message/in/message.use-case';
@@ -30,6 +30,18 @@ export class MessageResolver {
       ctx.user,
     );
     return this.mapMessage(resultMessage);
+  }
+
+  @Query('messages')
+  @WithoutAuth(true)
+  public async getMessages(
+    @Context() ctx: GQLContext,
+    @Args('roomId') roomId: string,
+    @Args('from') from?: number,
+    @Args('to') to?: number,
+  ): Promise<Message[]> {
+    const messages = await this._messageUseCase.getMessages(roomId, ctx?.user);
+    return messages.slice(from, to).map(this.mapMessage);
   }
 
   private mapMessage(message: MessageEntity): Message {

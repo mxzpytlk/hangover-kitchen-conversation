@@ -85,6 +85,10 @@ export class RoomEntity {
     }, []);
   }
 
+  public get messages(): MessageEntity[] {
+    return this._messages;
+  }
+
   public hasUser(user: UserEntity): boolean {
     return this.users.some((userInRoom) => userInRoom.equals(user));
   }

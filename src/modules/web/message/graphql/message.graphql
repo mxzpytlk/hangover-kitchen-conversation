@@ -46,7 +46,7 @@ input SendMessageInput {
 }
 
 type Query {
-  messages(roomId: String!): [Message!]!
+  messages(roomId: String!, from: Int, to: Int): [Message!]!
 }
 
 type Mutation {

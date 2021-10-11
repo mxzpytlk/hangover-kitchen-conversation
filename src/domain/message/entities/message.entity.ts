@@ -13,7 +13,7 @@ export class MessageEntity {
     private readonly _date: Date,
     private readonly _roomId: RoomId,
     private readonly _repliedId?: MessageId,
-    private readonly _files?: HKCFile[],
+    private readonly _files: HKCFile[] = [],
     private readonly _authorId?: UserId,
   ) {}
 

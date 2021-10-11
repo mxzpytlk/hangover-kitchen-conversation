@@ -24,14 +24,14 @@ export class MessageMapper {
     if (!messageOrm) {
       return null;
     }
-    const files = messageOrm.files.map(FileMapper.mapToDomain);
+    const files = messageOrm.files?.map(FileMapper.mapToDomain);
     const message = new MessageEntity(
       messageOrm.id,
       messageOrm.text,
       messageOrm.date,
       messageOrm.roomId,
       messageOrm.repliedId,
-      files,
+      files || [],
       messageOrm.authorId,
     );
     const author = UserMapper.mapToDomain(messageOrm.author);

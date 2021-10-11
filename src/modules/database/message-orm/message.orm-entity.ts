@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { FileOrmEntity } from '../file-orm/file.orm-entity';
 import { UserOrmEntity } from '../user-orm/user.orm-entity';
+import { RoomOrmEntity } from '../user-room-orm/orm-entities/room.orm-entity';
 
 @Entity('messages')
 export class MessageOrmEntity {
@@ -51,4 +52,10 @@ export class MessageOrmEntity {
     name: 'author_id',
   })
   public author: UserOrmEntity;
+
+  @ManyToOne(() => RoomOrmEntity, (room) => room.messages)
+  @JoinColumn({
+    name: 'room_id',
+  })
+  public room: RoomOrmEntity;
 }

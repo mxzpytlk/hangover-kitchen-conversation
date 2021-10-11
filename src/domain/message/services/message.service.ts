@@ -56,6 +56,14 @@ export class MessageService implements IMessageUseCase {
     return message;
   }
 
+  public async getMessages(
+    roomId: RoomId,
+    user?: UserEntity,
+  ): Promise<MessageEntity[]> {
+    const room = await this._roomUseCase.getRoom(roomId, user);
+    return room.messages;
+  }
+
   private async sendNewMessageNotifications(
     message: MessageEntity,
     room: RoomEntity,

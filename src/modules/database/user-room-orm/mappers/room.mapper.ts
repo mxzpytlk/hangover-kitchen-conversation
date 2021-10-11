@@ -1,6 +1,7 @@
 import { RoomEntity } from 'src/domain/rooms/entities/room.entity';
 import { UserRoomEntity } from 'src/domain/rooms/entities/user-room.entity';
 import { UsersInRoom } from 'src/domain/rooms/room.type';
+import { MessageMapper } from '../../message-orm/message.mapper';
 import { RoomOrmEntity } from '../orm-entities/room.orm-entity';
 import { UserRoomOrmEntity } from '../orm-entities/user-room.orm-entity';
 import { UserRoomMapper } from './user-room.mapper';
@@ -23,12 +24,13 @@ export class RoomMapper {
     const users: UsersInRoom = RoomMapper.mapOrmToUsersRoomDomain(
       roomOrm.userRooms,
     );
+    const messages = roomOrm.messages?.map(MessageMapper.mapToDomain);
 
     return new RoomEntity(
       roomOrm.id,
       roomOrm.title,
       roomOrm.date,
-      [],
+      messages || [],
       users,
       roomOrm.isOpen,
       roomOrm.canSendAnonimusMessage,

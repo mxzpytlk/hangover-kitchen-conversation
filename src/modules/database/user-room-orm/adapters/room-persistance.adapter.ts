@@ -22,7 +22,7 @@ export class RoomPersistanceAdapter implements IRoomsStorePort {
 
   public async getRoom(id: string): Promise<RoomEntity> {
     const roomOrm = await this._roomRepository.findOne(id, {
-      relations: ['userRooms', 'userRooms.user'],
+      relations: ['userRooms', 'userRooms.user', 'messages', 'messages.author'],
     });
     return RoomMapper.mapToDomain(roomOrm);
   }

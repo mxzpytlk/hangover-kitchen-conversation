@@ -12,23 +12,20 @@ export enum RegisterResult {
     FAILED = "FAILED"
 }
 
-export enum MessageType {
-    TEXT = "TEXT",
-    FILE = "FILE",
-    REPLY = "REPLY"
-}
-
 export enum NotificationType {
     USER_WANT_JOIN_ROOM = "USER_WANT_JOIN_ROOM",
     ROOM_ACCESS_ALLOWED = "ROOM_ACCESS_ALLOWED",
-    MESSAGE_RECIEVED = "MESSAGE_RECIEVED",
+    NEW_MESSAGE = "NEW_MESSAGE",
+    MESSAGE_REPLY = "MESSAGE_REPLY",
     UNKNOWN = "UNKNOWN"
 }
 
 export interface SendMessageInput {
-    roomId?: Nullable<string>;
-    type?: Nullable<MessageType>;
-    content?: Nullable<string>;
+    roomId: string;
+    text: string;
+    isAnonimus: boolean;
+    photoes?: Nullable<Upload[]>;
+    repliedId?: Nullable<string>;
 }
 
 export interface UpdateProfileInput {
@@ -43,8 +40,8 @@ export interface SuccessAuth {
 
 export interface IQuery {
     login(email: string, password: string): SuccessAuth | Promise<SuccessAuth>;
-    messages(roomId?: Nullable<string>): Message[] | Promise<Message[]>;
-    getNotifications(from?: Nullable<number>, to?: Nullable<number>): Notification[] | Promise<Notification[]>;
+    messages(roomId: string): Message[] | Promise<Message[]>;
+    notifications(from?: Nullable<number>, to?: Nullable<number>): Notification[] | Promise<Notification[]>;
     allRooms(from?: Nullable<number>, to?: Nullable<number>): Room[] | Promise<Room[]>;
     room(roomId: string): Room | Promise<Room>;
     waitingUsers(roomId: string): Profile[] | Promise<Profile[]>;
@@ -56,7 +53,7 @@ export interface IMutation {
     register(email: string, password: string): Nullable<RegisterResult> | Promise<Nullable<RegisterResult>>;
     refresh(): Nullable<SuccessAuth> | Promise<Nullable<SuccessAuth>>;
     logout(): Nullable<boolean> | Promise<Nullable<boolean>>;
-    sendMessage(input?: Nullable<SendMessageInput>): Nullable<boolean> | Promise<Nullable<boolean>>;
+    sendMessage(message: SendMessageInput): Nullable<Message> | Promise<Nullable<Message>>;
     createRoom(title: string, description?: Nullable<string>, isOpen?: Nullable<boolean>, canSendAnonimusMessage?: Nullable<boolean>, limit?: Nullable<number>): Room | Promise<Room>;
     joinRoom(roomId: string): Nullable<Room> | Promise<Nullable<Room>>;
     letUserIn(userName: string, roomId: string): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -66,10 +63,12 @@ export interface IMutation {
 }
 
 export interface Message {
+    id: string;
     date: string;
-    receiver?: Nullable<Profile>;
-    type?: Nullable<MessageType>;
-    content?: Nullable<string>;
+    author?: Nullable<Profile>;
+    text: string;
+    photoes?: Nullable<string[]>;
+    repliedId?: Nullable<string>;
 }
 
 export interface UserNotification {
@@ -83,7 +82,9 @@ export interface RoomNotification {
 
 export interface MessageNotification {
     roomTitle: string;
-    message?: Nullable<Message>;
+    text: string;
+    author?: Nullable<Profile>;
+    repliedId?: Nullable<string>;
 }
 
 export interface Notification {
@@ -117,5 +118,6 @@ export interface User {
     personalInfo?: Nullable<Profile>;
 }
 
+export type Upload = any;
 export type NotificationValue = UserNotification | RoomNotification | MessageNotification;
 type Nullable<T> = T | null;

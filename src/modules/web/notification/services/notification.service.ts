@@ -1,28 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { PubSub } from 'graphql-subscriptions';
-import { SubscriptionTrigger } from 'src/core/enums/subscription-trigger.enum';
 import { INotificationPort } from 'src/domain/notifications/out/notification.port';
-import { Notification } from 'src/domain/notifications/notification.type';
+import {
+  Notification,
+  NotificationType,
+} from 'src/domain/notifications/notification.type';
 import { UserId } from 'src/domain/users/entities/user.entity';
 import { INotificationStorePort } from 'src/domain/notifications/out/notufication-store.port';
+import { SubscriptionNotificationService } from './subscription-notification.service';
 
 export const NotificationServiceSymbol = Symbol('NotificationService');
 
 @Injectable()
 export class NotificationWebService implements INotificationPort {
+  private readonly NOT_SAVED_NOTIFICATIONS = [
+    NotificationType.ACOUNT_ACTIVATION,
+    NotificationType.NEW_MESSAGE,
+  ];
+
   constructor(
-    private readonly _pubSub: PubSub,
     private readonly _notificationStorePort: INotificationStorePort,
+    private readonly _notificationSubscription: SubscriptionNotificationService,
   ) {}
 
   public async sendNotification(
     userId: UserId,
     notification: Notification,
   ): Promise<void> {
-    this._notificationStorePort.saveNotification(notification, userId);
-    this._pubSub.publish(SubscriptionTrigger.NEW_NOTIFICATION, {
-      userId,
-      notification,
-    });
+    if (!this.NOT_SAVED_NOTIFICATIONS.includes(notification.type)) {
+      this._notificationStorePort.saveNotification(notification, userId);
+    }
+    this._notificationSubscription.sendNotification(userId, notification);
   }
 }

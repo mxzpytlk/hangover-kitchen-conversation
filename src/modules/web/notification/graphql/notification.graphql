@@ -9,7 +9,15 @@ type RoomNotification {
 
 type MessageNotification {
   roomTitle: String!
-  message: Message
+  text: String!
+  """
+  Автор необязателен, т.к. может прийти анонимное сообщение.
+  """
+  author: Profile
+  """
+  id сообщения, на которое ответили.
+  """
+  repliedId: String
 }
 
 """
@@ -28,7 +36,16 @@ enum NotificationType {
   В value лежит RoomNotification.
   """
   ROOM_ACCESS_ALLOWED
-  MESSAGE_RECIEVED
+  """
+  Уведомление пользователя о новом сообщении.
+  В value лежит MessageNotification.
+  """
+  NEW_MESSAGE
+  """
+  Уведомление пользователя о том, что на его сообщение ответили.
+  В value лежит MessageNotification.
+  """
+  MESSAGE_REPLY
   UNKNOWN
 }
 
@@ -38,6 +55,7 @@ type Notification {
 }
 
 """
+Подписка осуществляется по протоколу ws-graphql
 При подписке клиенту необходимо отправлять access token в параметрах соединения с ключем auhorization.
 Также необходимо помнить, что каждые полчаса access token сбрасывается и клиенту необходимо установить соединение заново,
 с валидным токеном.
@@ -57,5 +75,5 @@ type Query {
   From и to диапозон порядковых значений, внутри которого будут возвращаться уведомления. Отсутствие какого-либо параметра сервер 
   расценивает, как верхнюю/нижнюю границу.
   """
-  getNotifications(from: Int, to: Int): [Notification!]!
+  notifications(from: Int, to: Int): [Notification!]!
 }

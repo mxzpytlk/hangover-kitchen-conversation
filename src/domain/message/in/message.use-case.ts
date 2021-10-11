@@ -7,8 +7,9 @@ export interface IMessageUseCase {
   sendMessage(
     roomId: RoomId,
     text: string,
-    replyOn?: MessageId,
+    isAnonimus: boolean,
+    repliedId?: MessageId,
     files?: HKCFile[],
-    sender?: UserEntity,
+    author?: UserEntity,
   ): Promise<MessageEntity>;
 }

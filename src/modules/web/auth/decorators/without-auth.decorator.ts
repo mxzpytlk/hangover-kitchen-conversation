@@ -3,7 +3,7 @@ import { MetadataKeys } from 'src/core/enums/metadata-keys';
 
 export type AuthCheck = {
   withoutAuth: boolean;
-  needattempt?: boolean;
+  needAttempt?: boolean;
   withoutProfileFullfiled?: boolean;
 };
 

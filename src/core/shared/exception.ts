@@ -90,4 +90,11 @@ export class Exception extends Error {
       ExceptionTypes.USER_INPUT,
     );
   }
+
+  public static get NO_MESSAGE_IN_ROOM(): Exception {
+    return new Exception(
+      'This message does not exist in room',
+      ExceptionTypes.USER_INPUT,
+    );
+  }
 }

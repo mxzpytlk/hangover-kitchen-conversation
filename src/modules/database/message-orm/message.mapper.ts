@@ -1,6 +1,7 @@
 import { MessageEntity } from 'src/domain/message/entities/message.entity';
 import { RoomId } from 'src/domain/rooms/entities/room.entity';
 import { FileMapper } from '../file-orm/file.mapper';
+import { UserMapper } from '../user-orm/user.mapper';
 import { MessageOrmEntity } from './message.orm-entity';
 
 export class MessageMapper {
@@ -20,14 +21,22 @@ export class MessageMapper {
   }
 
   public static mapToDomain(messageOrm: MessageOrmEntity): MessageEntity {
+    if (!messageOrm) {
+      return null;
+    }
     const files = messageOrm.files.map(FileMapper.mapToDomain);
-    return new MessageEntity(
+    const message = new MessageEntity(
       messageOrm.id,
       messageOrm.text,
       messageOrm.date,
+      messageOrm.roomId,
       messageOrm.repliedId,
       files,
       messageOrm.authorId,
     );
+    const author = UserMapper.mapToDomain(messageOrm.author);
+    message.author = author;
+
+    return message;
   }
 }

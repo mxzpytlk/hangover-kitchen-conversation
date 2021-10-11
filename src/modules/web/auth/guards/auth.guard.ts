@@ -28,13 +28,14 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
     );
 
-    if (checkAuth?.withoutAuth && !checkAuth.needattempt) {
+    if (checkAuth?.withoutAuth && !checkAuth.needAttempt) {
       return true;
     }
 
     const gqlContext = GqlExecutionContext.create(context);
     const ctx = gqlContext.getContext<GQLContext>();
     const { req, connectionParams } = ctx;
+
     const authorization = (req?.headers || connectionParams)?.authorization;
 
     const accessToken = authorization.split(' ')?.[1];

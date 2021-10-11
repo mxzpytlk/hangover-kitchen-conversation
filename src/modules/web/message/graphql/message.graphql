@@ -1,26 +1,54 @@
-enum MessageType {
-  TEXT
-  FILE
-  REPLY
-}
+"""
+Необходим для загрузки файлов с клиента.
+
+Документация к конкретной реализации серверной части.
+Можкт стать отправной точкой, если необходимо получить информацию о деталях запроса.
+Искренне надеюсь, что из этого файла по этой ссылке никто не перейдет.
+https://www.apollographql.com/docs/apollo-server/data/file-uploads/
+
+Варианты реализации для языка kotlin:
+https://www.apollographql.com/docs/android/essentials/mutations/
+https://github.com/jaydenseric/graphql-multipart-request-spec
+"""
+scalar Upload
+
 
 type Message {
+  id: String!
   date: String!
-  receiver: Profile
-  type: MessageType
-  content: String
+  author: Profile
+  text: String!
+  """
+  Адресс фотографий
+  """
+  photoes: [String!]
+  """
+  id сообщения, на которое ответили 
+  """
+  repliedId: String
 }
 
 input SendMessageInput {
-  roomId: String
-  type: MessageType
-  content: String
+  roomId: String!
+  """
+  Необходимо вставить в это поле хотя бы пустую строку.
+  """
+  text: String!
+  isAnonimus: Boolean!
+  """
+  Нельзя отправить больше 5 фотографий
+  """
+  photoes: [Upload!]
+  """
+  id сообщения, на которое ответил пользователь.
+  """
+  repliedId: String
 }
 
 type Query {
-  messages(roomId: String): [Message!]!
+  messages(roomId: String!): [Message!]!
 }
 
 type Mutation {
-  sendMessage(input: SendMessageInput): Boolean
+  sendMessage(message: SendMessageInput!): Message
 }

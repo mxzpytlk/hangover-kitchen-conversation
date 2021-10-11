@@ -5,6 +5,7 @@ import { MessageEntity } from 'src/domain/message/entities/message.entity';
 import { IMessageStorePort } from 'src/domain/message/out/message-store.port';
 import { HKCFile } from 'src/domain/types';
 import { Repository } from 'typeorm';
+import { UserPersistenceAdapter } from '../user-orm/user-persistance.adapter';
 import { MessageMapper } from './message.mapper';
 import { MessageOrmEntity } from './message.orm-entity';
 
@@ -13,6 +14,7 @@ export class MessagePersistanceAdapter implements IMessageStorePort {
   constructor(
     @InjectRepository(MessageOrmEntity)
     private readonly _messageRepository: Repository<MessageOrmEntity>,
+    private readonly _userPersistanceAdapter: UserPersistenceAdapter,
   ) {}
 
   public async saveMessage(
@@ -27,18 +29,23 @@ export class MessagePersistanceAdapter implements IMessageStorePort {
       messageId,
       text,
       new Date(),
+      roomId,
       repliedId,
       files,
       authorId,
     );
     const messageOrm = MessageMapper.mapToOrm(message, roomId);
     await this._messageRepository.save(messageOrm);
+    if (authorId) {
+      const author = await this._userPersistanceAdapter.getUserById(authorId);
+      message.author = author;
+    }
     return message;
   }
 
   public async getMessage(id: string): Promise<MessageEntity> {
     const message = await this._messageRepository.findOne(id, {
-      relations: ['repliedMessage', 'files'],
+      relations: ['repliedMessage', 'files', 'author'],
     });
     return MessageMapper.mapToDomain(message);
   }

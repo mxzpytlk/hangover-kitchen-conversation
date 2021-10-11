@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 import { FileOrmEntity } from '../file-orm/file.orm-entity';
+import { UserOrmEntity } from '../user-orm/user.orm-entity';
 
 @Entity('messages')
 export class MessageOrmEntity {
@@ -22,7 +24,7 @@ export class MessageOrmEntity {
   public roomId: string;
 
   @Column({
-    name: 'user_id',
+    name: 'author_id',
   })
   public authorId: string;
 
@@ -36,11 +38,17 @@ export class MessageOrmEntity {
 
   @OneToOne(() => MessageOrmEntity)
   @JoinColumn({
-    name: 'repliedId',
+    name: 'replied_id',
     referencedColumnName: 'id',
   })
   public repliedMessage: MessageOrmEntity;
 
   @OneToMany(() => FileOrmEntity, (file) => file.message)
   public files: FileOrmEntity[];
+
+  @ManyToOne(() => UserOrmEntity, (user) => user.messages)
+  @JoinColumn({
+    name: 'author_id',
+  })
+  public author: UserOrmEntity;
 }

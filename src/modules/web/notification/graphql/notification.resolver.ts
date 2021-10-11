@@ -15,7 +15,7 @@ import { Inject } from '@nestjs/common';
 import { NotificationPersistanceAdapter } from 'src/modules/database/notification-orm/notification-persistance.adapter';
 
 type SubscriptionPayload = {
-  userId: UserId;
+  userId: UserId | UserId[];
   notification: Notification;
 };
 
@@ -27,7 +27,7 @@ export class NotificationResolver {
     private readonly _notificationStore: INotificationStorePort,
   ) {}
 
-  @Query()
+  @Query('notifications')
   @WithoutProfileFullfiled()
   public async getNotifications(
     @Context() ctx: GQLContext,
@@ -57,6 +57,10 @@ export class NotificationResolver {
   }
 
   private filterSubscription(payload: SubscriptionPayload, ctx: GQLContext) {
+    const requisites = payload.userId;
+    if (Array.isArray(requisites)) {
+      return requisites.includes(ctx.user.id);
+    }
     return ctx.user?.id === payload.userId;
   }
 

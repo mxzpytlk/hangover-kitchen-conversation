@@ -21,18 +21,32 @@ export class MessageService implements IMessageUseCase {
   public async sendMessage(
     roomId: RoomId,
     text: string,
-    replyOn?: MessageId,
+    isAnonimus: boolean,
+    repliedId?: MessageId,
     files?: HKCFile[],
-    author?: UserEntity,
+    sender?: UserEntity,
   ): Promise<MessageEntity> {
+    if (!isAnonimus && !sender) {
+      throw Exception.WRONG_AUTH_DATA;
+    }
+    const author = isAnonimus ? null : sender;
+
     const room = await this._roomUseCase.getRoom(roomId, author);
     if (!(author || room.canSendAnonimusMessage)) {
       throw Exception.NOT_ANONIMUS_MESSAGE;
     }
+
+    if (repliedId) {
+      const replied = await this._messageStorePort.getMessage(repliedId);
+      if (replied?.roomId !== roomId) {
+        throw Exception.NO_MESSAGE_IN_ROOM;
+      }
+    }
+
     const message = await this._messageStorePort.saveMessage(
       text,
       roomId,
-      replyOn,
+      repliedId,
       files,
       author?.id,
     );
@@ -51,7 +65,7 @@ export class MessageService implements IMessageUseCase {
     const notificationValue = this.mapMessageToNotification(
       message,
       author,
-      room.id,
+      room.title,
     );
     this._notificator.sendNotification(roomUserIds, {
       type: NotificationType.NEW_MESSAGE,
@@ -59,15 +73,15 @@ export class MessageService implements IMessageUseCase {
     });
 
     if (message.repliedId) {
-      const replyOn = await this._messageStorePort.getMessage(
+      const replied = await this._messageStorePort.getMessage(
         message.repliedId,
       );
-      if (replyOn.authorId) {
-        this._notificator.sendNotification(replyOn.authorId, {
+      if (replied.authorId) {
+        this._notificator.sendNotification(replied.authorId, {
           type: NotificationType.MESSAGE_REPLY,
           value: {
             ...notificationValue,
-            replyOn: replyOn.id,
+            repliedId: replied.id,
           },
         });
       }
@@ -77,12 +91,12 @@ export class MessageService implements IMessageUseCase {
   private mapMessageToNotification(
     message: MessageEntity,
     author: UserEntity,
-    roomId: RoomId,
+    roomTitle: string,
   ) {
     return {
       text: message.text,
-      author: author.personalInfo,
-      roomId,
+      author: author?.personalInfo,
+      roomTitle,
     };
   }
 }

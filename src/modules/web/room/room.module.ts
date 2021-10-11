@@ -32,5 +32,6 @@ import { RoomResolver } from './graphql/room.resolver';
     },
     RoomResolver,
   ],
+  exports: [RoomServiceSymbol],
 })
 export class RoomModule {}

@@ -14,6 +14,10 @@ import {
   NotificationWebService,
   NotificationServiceSymbol,
 } from './services/notification.service';
+import {
+  NotificationSubscriptionSymbol,
+  SubscriptionNotificationService,
+} from './services/subscription-notification.service';
 
 @Module({
   imports: [NotificationOrmModule, MailModule],
@@ -21,12 +25,22 @@ import {
     NotificationValueResolver,
     NotificationResolver,
     {
+      provide: NotificationSubscriptionSymbol,
+      useFactory: (pubSub: PubSub) =>
+        new SubscriptionNotificationService(pubSub),
+      inject: [PubSub],
+    },
+    {
       provide: NotificationServiceSymbol,
       useFactory: (
-        pubSub: PubSub,
         notificationPersistanceAdapter: NotificationPersistanceAdapter,
-      ) => new NotificationWebService(pubSub, notificationPersistanceAdapter),
-      inject: [PubSub, NotificationPersistanceAdapter],
+        subscriptionNotificationService: SubscriptionNotificationService,
+      ) =>
+        new NotificationWebService(
+          notificationPersistanceAdapter,
+          subscriptionNotificationService,
+        ),
+      inject: [NotificationPersistanceAdapter, NotificationSubscriptionSymbol],
     },
     {
       provide: ActivationMailSymbol,
@@ -35,6 +49,10 @@ import {
       inject: [MailService],
     },
   ],
-  exports: [NotificationServiceSymbol, ActivationMailSymbol],
+  exports: [
+    NotificationServiceSymbol,
+    ActivationMailSymbol,
+    NotificationSubscriptionSymbol,
+  ],
 })
 export class NotificationModule {}

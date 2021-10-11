@@ -17,7 +17,7 @@ export class FileOrmEntity {
 
   @ManyToOne(() => MessageOrmEntity, (message) => message.files)
   @JoinColumn({
-    name: 'messageId',
+    name: 'message_id',
   })
   public message: MessageOrmEntity;
 }

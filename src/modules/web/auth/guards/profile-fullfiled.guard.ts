@@ -23,7 +23,7 @@ export class ProfileFullfiledGuard implements CanActivate {
       context.getHandler(),
     );
     if (
-      (withoutAuth?.withoutAuth && !withoutAuth.needattempt) ||
+      (withoutAuth?.withoutAuth && !withoutAuth.needAttempt) ||
       withoutProfileFulfiled
     ) {
       return true;
@@ -32,6 +32,6 @@ export class ProfileFullfiledGuard implements CanActivate {
     const ctx = gqlContext.getContext<GQLContext>();
     const user = await this._userPersistanceAdapter.getUserById(ctx.user.id);
     ctx.user = user;
-    return user.isProfileFullfiled || withoutAuth?.needattempt;
+    return user.isProfileFullfiled || withoutAuth?.needAttempt;
   }
 }
